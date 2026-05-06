@@ -1,0 +1,597 @@
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  ArrowRight, Clock, Layers, Zap, Circle, BookOpen, Search,
+  Star, ChevronLeft, ChevronRight, Plus, Mail,
+  Youtube, Twitter, Instagram
+} from 'lucide-react';
+import '../fighting-star.css';
+
+function useReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { el.classList.add('fs-visible'); obs.disconnect(); } },
+      { threshold: 0.12 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return ref;
+}
+
+function FourPointStar({ size = 28, color = 'var(--fs-accent)' }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 0 C16 0 17.5 12 20 16 C17.5 20 16 32 16 32 C16 32 14.5 20 12 16 C14.5 12 16 0 16 0Z" fill={color} />
+      <path d="M0 16 C0 16 12 14.5 16 12 C20 14.5 32 16 32 16 C32 16 20 17.5 16 20 C12 17.5 0 16 0 16Z" fill={color} />
+    </svg>
+  );
+}
+
+function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const linkStyle: React.CSSProperties = {
+    fontFamily: 'Cinzel, serif',
+    fontSize: '0.7rem',
+    letterSpacing: '0.15em',
+    textTransform: 'uppercase',
+    color: 'var(--fs-muted)',
+    textDecoration: 'none',
+    transition: 'color 0.25s ease',
+    cursor: 'pointer',
+  };
+
+  return (
+    <nav style={{
+      position: 'fixed', top: 0, left: 0, right: 0, height: 72, zIndex: 100,
+      background: scrolled ? 'rgba(26,22,16,0.95)' : 'rgba(26,22,16,0.85)',
+      backdropFilter: 'blur(12px)',
+      borderBottom: '1px solid var(--fs-divider)',
+      transition: 'background 0.3s ease',
+      display: 'flex', alignItems: 'center',
+    }}>
+      <div style={{
+        maxWidth: 1200, margin: '0 auto', width: '100%', padding: '0 64px',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      }}>
+        <div style={{ display: 'flex', gap: 36 }}>
+          {['PÁGINA INICIAL', 'PORTFÓLIO', 'SOBRE NÓS'].map(l => (
+            <a key={l} href="#" style={linkStyle}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-text)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--fs-muted)')}
+            >{l}</a>
+          ))}
+        </div>
+        <FourPointStar size={26} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 36 }}>
+          <div style={{ width: 1, height: 20, background: 'var(--fs-divider)' }} />
+          {['ORÇAMENTOS', 'PREÇOS', 'DESAFIOS'].map(l => (
+            <a key={l} href="#" style={linkStyle}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-text)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--fs-muted)')}
+            >{l}</a>
+          ))}
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+function HeroSection() {
+  const textRef = useReveal();
+  return (
+    <section style={{ minHeight: '100dvh', paddingTop: 72, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+      <div className="fs-blob" style={{ width: 500, height: 500, right: '30%', top: '50%', transform: 'translateY(-50%)', opacity: 0.12 }} />
+      <div className="fs-blob" style={{ width: 300, height: 300, left: '-80px', bottom: '10%', opacity: 0.07, borderRadius: '50%' }} />
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 64px', width: '100%', display: 'flex', alignItems: 'center', gap: 40 }}>
+        <div ref={textRef} className="fs-fade-up" style={{ flex: '0 0 45%', paddingRight: 40, paddingTop: 48, paddingBottom: 48 }}>
+          <h1 style={{ fontFamily: 'UnifrakturMaguntia, cursive', fontSize: 72, lineHeight: 1.08, marginBottom: 28 }}>
+            <span style={{ display: 'block', color: 'var(--fs-text)' }}>Pinturas</span>
+            <span style={{ display: 'block', color: 'var(--fs-text)' }}>Corporais</span>
+            <span style={{ display: 'block', color: 'var(--fs-text)' }}>
+              que{' '}
+              <span style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', color: 'var(--fs-accent)' }}>
+                Desafiam
+              </span>
+            </span>
+            <span style={{ display: 'block', color: 'var(--fs-text)' }}>Sua Alma</span>
+          </h1>
+          <p className="fs-fade-up fs-delay-1" style={{ color: 'var(--fs-muted)', fontSize: '1.05rem', lineHeight: 1.65, maxWidth: 380, marginBottom: 40 }}>
+            Arte permanente feita para quem não tem medo de sentir.
+          </p>
+          <button
+            className="fs-fade-up fs-delay-2"
+            style={{
+              background: 'var(--fs-accent)', color: 'var(--fs-dark)',
+              border: 'none', borderRadius: 50,
+              fontFamily: 'Cinzel, serif', fontWeight: 700,
+              fontSize: '0.72rem', letterSpacing: '0.18em', textTransform: 'uppercase',
+              padding: '16px 36px', cursor: 'pointer',
+              display: 'inline-flex', alignItems: 'center', gap: 12,
+              transition: 'background 0.25s ease, transform 0.2s ease',
+              boxShadow: '0 4px 24px rgba(196,149,106,0.3)',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent-light)'; (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.04)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent)'; (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)'; }}
+          >
+            AGENDAR VISITA
+            <ArrowRight size={17} />
+          </button>
+          <div className="fs-fade-up fs-delay-3" style={{ marginTop: 40, display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+              <Clock size={15} color="var(--fs-accent)" />
+              <span>Seg–Sex: &nbsp;11h–21h</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+              <div style={{ width: 15 }} />
+              <span>Sáb–Dom: 14h–20h</span>
+            </div>
+          </div>
+        </div>
+        <div style={{ flex: '0 0 55%', position: 'relative', height: 700 }}>
+          <div style={{ position: 'absolute', inset: 0, borderRadius: 24, overflow: 'hidden', border: '1px solid var(--fs-divider)' }}>
+            <img src="/images/hero-figure.png" alt="Figura tatuada" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 240, background: 'linear-gradient(to bottom, transparent, var(--fs-bg))' }} />
+          </div>
+          <div className="fs-float" style={{
+            position: 'absolute', bottom: 72, right: -24, zIndex: 10,
+            background: 'var(--fs-surface)', borderRadius: 14, padding: '20px 28px',
+            boxShadow: '0 12px 48px rgba(0,0,0,0.5)', border: '1px solid rgba(196,149,106,0.2)', minWidth: 220,
+          }}>
+            <div style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
+              <div>
+                <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.6rem', color: 'var(--fs-muted)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 6 }}>TEMPO</p>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: '1.15rem', color: 'var(--fs-dark)' }}>2 Semanas</p>
+              </div>
+              <div style={{ width: 1, height: 36, background: 'rgba(61,53,41,0.35)' }} />
+              <div>
+                <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.6rem', color: 'var(--fs-muted)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 6 }}>VALOR</p>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: '1.15rem', color: 'var(--fs-dark)' }}>R$ 2.100,00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PartnersStrip() {
+  const partners = [
+    { icon: Layers, name: 'Layers' },
+    { icon: Zap, name: 'Sisyphus' },
+    { icon: Circle, name: 'Circooles' },
+    { icon: BookOpen, name: 'Catalog' },
+    { icon: Search, name: 'Quotient' },
+  ];
+  return (
+    <div style={{ borderTop: '1px solid var(--fs-divider)', borderBottom: '1px solid var(--fs-divider)', background: 'var(--fs-bg2)', padding: '28px 0' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 64px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 24 }}>
+        {partners.map((P, i) => (
+          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase', opacity: 0.65, cursor: 'default', transition: 'opacity 0.25s, color 0.25s' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.opacity = '1'; (e.currentTarget as HTMLDivElement).style.color = 'var(--fs-accent)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.opacity = '0.65'; (e.currentTarget as HTMLDivElement).style.color = 'var(--fs-muted)'; }}
+          >
+            <P.icon size={16} strokeWidth={1.5} />
+            <span>{P.name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PortfolioSection() {
+  const headRef = useReveal();
+  const col1Ref = useReveal();
+  const col2Ref = useReveal();
+  const col3Ref = useReveal();
+  const [hov, setHov] = useState<string | null>(null);
+
+  const cardStyle = (hover: boolean): React.CSSProperties => ({
+    borderRadius: 12, overflow: 'hidden', position: 'relative', cursor: 'pointer',
+    transform: hover ? 'scale(1.02)' : 'scale(1)',
+    boxShadow: hover ? '0 8px 32px rgba(196,149,106,0.18)' : '0 2px 12px rgba(0,0,0,0.3)',
+    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+  });
+
+  return (
+    <section style={{ padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
+      <div className="fs-blob" style={{ width: 600, height: 600, left: -200, top: 100, opacity: 0.08 }} />
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 64px', position: 'relative', zIndex: 1 }}>
+        <div ref={headRef} className="fs-fade-up" style={{ marginBottom: 64 }}>
+          <h2 style={{ fontFamily: 'UnifrakturMaguntia, cursive', fontSize: 52, lineHeight: 1.1, color: 'var(--fs-text)', maxWidth: 600 }}>
+            O Processo Ajustado vai fazer você gritar — e depois, sorrir.
+          </h2>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24 }}>
+          <div ref={col1Ref} className="fs-fade-up fs-delay-1" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            <div style={{ ...cardStyle(hov === 'artist'), height: 500, background: 'var(--fs-bg2)' }}
+              onMouseEnter={() => setHov('artist')} onMouseLeave={() => setHov(null)}>
+              <img src="/images/artist.png" alt="Artista" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 160, background: 'linear-gradient(to top, rgba(26,22,16,0.92), transparent)' }} />
+              <div style={{ position: 'absolute', bottom: 24, left: 24 }}>
+                <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.65rem', letterSpacing: '0.14em', color: 'var(--fs-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Artista Principal</p>
+                <p style={{ fontFamily: 'UnifrakturMaguntia, cursive', fontSize: '1.4rem', color: 'var(--fs-accent-light)' }}>Fighting Star</p>
+              </div>
+            </div>
+          </div>
+          <div ref={col2Ref} className="fs-fade-up fs-delay-2" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            {[
+              { img: '/images/tattoo-gorilla.png', price: 'R$ 2.800,00', label: 'GORILA URBANO' },
+              { img: '/images/tattoo-skull.png', price: 'R$ 1.500,00', label: 'SNAKE & SKULL' },
+            ].map((item) => (
+              <div key={item.label} style={{ ...cardStyle(hov === item.label), background: 'var(--fs-surface)', height: 238 }}
+                onMouseEnter={() => setHov(item.label)} onMouseLeave={() => setHov(null)}>
+                <img src={item.img} alt={item.label} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 12 }} />
+                <div style={{ position: 'absolute', bottom: 14, right: 14, background: 'var(--fs-dark)', border: '1px solid rgba(196,149,106,0.35)', borderRadius: 8, padding: '6px 14px' }}>
+                  <p style={{ fontFamily: 'Cinzel, serif', fontWeight: 700, fontSize: '0.78rem', color: 'var(--fs-accent)', letterSpacing: '0.06em' }}>{item.price}</p>
+                </div>
+                <div style={{ position: 'absolute', top: 14, left: 14 }}>
+                  <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.58rem', letterSpacing: '0.12em', color: 'var(--fs-muted)', textTransform: 'uppercase' }}>{item.label}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div ref={col3Ref} className="fs-fade-up fs-delay-3" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            <div style={{ ...cardStyle(hov === 'process'), height: 320 }}
+              onMouseEnter={() => setHov('process')} onMouseLeave={() => setHov(null)}>
+              <img src="/images/tattoo-process.png" alt="Processo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 60%, rgba(26,22,16,0.7))' }} />
+            </div>
+            <div style={{ background: 'var(--fs-bg2)', borderRadius: 12, padding: 32, border: '1px solid var(--fs-divider)', display: 'flex', flexDirection: 'column', gap: 16, flex: 1 }}>
+              <h3 style={{ fontFamily: 'UnifrakturMaguntia, cursive', fontSize: '1.9rem', color: 'var(--fs-accent-light)', lineHeight: 1.15 }}>
+                Highest rated Tatoo Club in the California.
+              </h3>
+              <p style={{ color: 'var(--fs-muted)', fontSize: '0.85rem', lineHeight: 1.65 }}>
+                Don't hesitate. No one has ever regretted their tatoos! Contact us now, and we'll help you.
+              </p>
+              <button style={{
+                background: 'transparent', border: '1px solid var(--fs-accent)', color: 'var(--fs-accent)',
+                borderRadius: 6, padding: '13px 0',
+                fontFamily: 'Cinzel, serif', fontWeight: 700, fontSize: '0.68rem', letterSpacing: '0.14em', textTransform: 'uppercase',
+                cursor: 'pointer', transition: 'background 0.25s, color 0.25s',
+              }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--fs-dark)'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--fs-accent)'; }}
+              >
+                CONTACT US NOW
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const TESTIMONIALS = [
+  {
+    name: 'MARINA C.', initials: 'MC', gradient: 'linear-gradient(135deg, #8B4513, #C4956A)',
+    quote: '"Fiquei mais feliz com o resultado do que com minhas expectativas. Arte que marca a alma para sempre."',
+    stars: 5,
+  },
+  {
+    name: 'RAFAEL S.', initials: 'RS', gradient: 'linear-gradient(135deg, #2C1810, #C4956A)',
+    quote: '"Designs mais intrincados e detalhados exigem mais tempo e habilidade — aqui isso é levado a sério. O cuidado com cada traço é incomparável."',
+    stars: 5,
+  },
+  {
+    name: 'JULIA M.', initials: 'JM', gradient: 'linear-gradient(135deg, #3D2B1F, #E8C99A)',
+    quote: '"Tatuagens com cor geralmente custam mais do que preto e cinza. Cores vibrantes podem exigir mais trabalho — e vale cada centavo."',
+    stars: 5,
+  },
+];
+
+const AVATARS = [
+  { initials: 'DK', gradient: 'linear-gradient(135deg, #1A1610, #8A7F6E)' },
+  ...TESTIMONIALS.map(t => ({ initials: t.initials, gradient: t.gradient })),
+  { initials: 'AT', gradient: 'linear-gradient(135deg, #26211A, #C4956A)' },
+];
+
+function TestimonialsSection() {
+  const [idx, setIdx] = useState(1);
+  const ref = useReveal();
+
+  return (
+    <section style={{ padding: '120px 0', background: 'var(--fs-bg2)', borderTop: '1px solid var(--fs-divider)', borderBottom: '1px solid var(--fs-divider)' }}>
+      <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 64px' }}>
+        <div ref={ref} className="fs-fade-up" style={{ textAlign: 'center', marginBottom: 56 }}>
+          <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.7rem', letterSpacing: '0.2em', color: 'var(--fs-accent)', textTransform: 'uppercase', marginBottom: 16 }}>Depoimentos</p>
+          <h2 style={{ fontFamily: 'UnifrakturMaguntia, cursive', fontSize: 52, color: 'var(--fs-text)', lineHeight: 1.1 }}>
+            O Que Nossos<br />Clientes Dizem
+          </h2>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 16, marginBottom: 48 }}>
+          {AVATARS.map((av, i) => {
+            const active = i === idx + 1;
+            return (
+              <div key={i} onClick={() => { if (i >= 1 && i <= 3) setIdx(i - 1); }}
+                style={{
+                  width: active ? 58 : 42, height: active ? 58 : 42, borderRadius: '50%', background: av.gradient,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontFamily: 'Cinzel, serif', fontWeight: 700, fontSize: active ? '0.75rem' : '0.6rem',
+                  color: 'var(--fs-surface)',
+                  border: active ? '2px solid var(--fs-accent)' : '2px solid transparent',
+                  boxShadow: active ? '0 0 18px rgba(196,149,106,0.35)' : 'none',
+                  opacity: active ? 1 : 0.5,
+                  cursor: i >= 1 && i <= 3 ? 'pointer' : 'default',
+                  transition: 'all 0.3s ease',
+                }}
+              >
+                {av.initials}
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ position: 'relative' }}>
+          <button onClick={() => setIdx(p => Math.max(0, p - 1))} disabled={idx === 0}
+            style={{
+              position: 'absolute', left: -24, top: '50%', transform: 'translateY(-50%)',
+              width: 48, height: 48, borderRadius: '50%', background: 'var(--fs-accent)',
+              border: 'none', cursor: idx === 0 ? 'not-allowed' : 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'var(--fs-dark)', opacity: idx === 0 ? 0.4 : 1,
+              boxShadow: '0 4px 16px rgba(196,149,106,0.3)', transition: 'background 0.2s', zIndex: 2,
+            }}
+            onMouseEnter={e => idx > 0 && ((e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent-light)')}
+            onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent)')}
+          >
+            <ChevronLeft size={22} />
+          </button>
+          <div style={{
+            background: 'var(--fs-bg)', border: '1px solid var(--fs-divider)',
+            borderRadius: 20, padding: '48px 56px', textAlign: 'center',
+            boxShadow: '0 4px 32px rgba(196,149,106,0.08)',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 4, marginBottom: 28 }}>
+              {Array(TESTIMONIALS[idx].stars).fill(0).map((_, i) => (
+                <Star key={i} size={18} fill="var(--fs-accent)" color="var(--fs-accent)" />
+              ))}
+            </div>
+            <p style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: '1.35rem', color: 'var(--fs-text)', lineHeight: 1.7, marginBottom: 32 }}>
+              {TESTIMONIALS[idx].quote}
+            </p>
+            <p style={{ fontFamily: 'Cinzel, serif', fontWeight: 700, fontSize: '0.72rem', letterSpacing: '0.18em', color: 'var(--fs-accent-light)' }}>
+              — {TESTIMONIALS[idx].name}
+            </p>
+          </div>
+          <button onClick={() => setIdx(p => Math.min(TESTIMONIALS.length - 1, p + 1))} disabled={idx === TESTIMONIALS.length - 1}
+            style={{
+              position: 'absolute', right: -24, top: '50%', transform: 'translateY(-50%)',
+              width: 48, height: 48, borderRadius: '50%', background: 'var(--fs-accent)',
+              border: 'none', cursor: idx === TESTIMONIALS.length - 1 ? 'not-allowed' : 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'var(--fs-dark)', opacity: idx === TESTIMONIALS.length - 1 ? 0.4 : 1,
+              boxShadow: '0 4px 16px rgba(196,149,106,0.3)', transition: 'background 0.2s', zIndex: 2,
+            }}
+            onMouseEnter={e => idx < TESTIMONIALS.length - 1 && ((e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent-light)')}
+            onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent)')}
+          >
+            <ChevronRight size={22} />
+          </button>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 32 }}>
+          {TESTIMONIALS.map((_, i) => (
+            <button key={i} onClick={() => setIdx(i)} style={{
+              width: i === idx ? 24 : 8, height: 8, borderRadius: 4, border: 'none', cursor: 'pointer',
+              background: i === idx ? 'var(--fs-accent)' : 'var(--fs-divider)', transition: 'all 0.3s ease', padding: 0,
+            }} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const FAQS = [
+  {
+    q: 'QUAL É O PROCESSO?',
+    a: 'Começamos com uma consulta gratuita onde entendemos sua visão, estilo e história. Após aprovação do esboço, agendamos a sessão. Cada etapa é uma colaboração entre cliente e artista para garantir uma obra única e permanente.',
+  },
+  {
+    q: 'COMO VOCÊS DEFINEM O PREÇO?',
+    a: '1. Tamanho: Os preços de tatuagem geralmente são baseados no tamanho do desenho. Tatuagens maiores costumam custar mais do que as menores. Alguns estúdios cobram por centímetro quadrado ou têm preços fixos para diferentes categorias de tamanho.\n\n2. Complexidade: A complexidade do design tem um papel importante na precificação. Designs mais intrincados e detalhados exigem mais tempo e habilidade, resultando em um custo mais elevado.\n\n3. Cor: Tatuagens coloridas geralmente custam mais do que as de preto e cinza. Cores vibrantes podem exigir mais trabalho e habilidade para atingir o resultado desejado.',
+  },
+  {
+    q: 'VOCÊS FAZEM QUALQUER TIPO DE TATUAGEM?',
+    a: 'Trabalhamos com a maioria dos estilos — Old School, Blackwork, Realismo, Neo-Tradicional, Geometria e Arte Autoral. Avaliamos cada pedido individualmente para garantir que possamos executar com o padrão Fighting Star.',
+  },
+  {
+    q: 'QUAL É A LOCALIZAÇÃO DE VOCÊS?',
+    a: 'Estamos localizados no coração da cidade. Entre em contato via formulário de orçamento ou pelas nossas redes sociais para obter o endereço completo e agendar uma visita ao estúdio.',
+  },
+];
+
+function FaqSection() {
+  const [openIdx, setOpenIdx] = useState(1);
+  const ref = useReveal();
+
+  return (
+    <section style={{ padding: '120px 0', position: 'relative' }}>
+      <div className="fs-blob" style={{ width: 400, height: 400, right: -100, bottom: 0, opacity: 0.06 }} />
+      <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 64px', position: 'relative', zIndex: 1 }}>
+        <div ref={ref} className="fs-fade-up" style={{ textAlign: 'center', marginBottom: 72 }}>
+          <FourPointStar size={22} />
+          <h2 style={{ fontFamily: 'UnifrakturMaguntia, cursive', fontSize: 48, color: 'var(--fs-text)', marginTop: 20, lineHeight: 1.1 }}>
+            Perguntas Frequentes
+          </h2>
+        </div>
+        <div>
+          {FAQS.map((faq, i) => {
+            const isOpen = openIdx === i;
+            return (
+              <div key={i} style={{ borderTop: '1px solid var(--fs-divider)' }}>
+                <button onClick={() => setOpenIdx(isOpen ? -1 : i)}
+                  style={{
+                    width: '100%', padding: '28px 0',
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', gap: 24,
+                  }}
+                >
+                  <span style={{
+                    fontFamily: 'Cinzel, serif', fontWeight: 600, fontSize: '0.82rem', letterSpacing: '0.1em', textTransform: 'uppercase',
+                    color: isOpen ? 'var(--fs-accent)' : 'var(--fs-text)', transition: 'color 0.25s ease',
+                  }}>
+                    {faq.q}
+                  </span>
+                  <div style={{ color: 'var(--fs-accent)', flexShrink: 0, transition: 'transform 0.3s', transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)' }}>
+                    <Plus size={22} />
+                  </div>
+                </button>
+                <div className={`fs-accordion-body${isOpen ? ' open' : ''}`}>
+                  <div className="fs-accordion-inner">
+                    <div style={{
+                      fontFamily: 'Inter, sans-serif', color: 'var(--fs-muted)',
+                      fontSize: '0.9rem', lineHeight: 1.8, paddingBottom: 32,
+                      paddingLeft: 20, borderLeft: '2px solid rgba(196,149,106,0.25)',
+                      whiteSpace: 'pre-line',
+                    }}>
+                      {faq.a}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+          <div style={{ borderTop: '1px solid var(--fs-divider)' }} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function NewsletterSection() {
+  const ref = useReveal();
+  return (
+    <section style={{ padding: '80px 64px 120px', maxWidth: 1200, margin: '0 auto' }}>
+      <div ref={ref} className="fs-fade-up" style={{
+        background: 'var(--fs-surface)', borderRadius: 24, padding: '60px 72px',
+        display: 'flex', alignItems: 'center', gap: 64,
+        position: 'relative', overflow: 'hidden', boxShadow: '0 8px 48px rgba(0,0,0,0.4)',
+      }}>
+        <div style={{ position: 'absolute', left: 28, top: '50%', transform: 'translateY(-50%)', fontSize: 20, color: 'var(--fs-accent)', opacity: 0.55 }}>◆</div>
+        <div style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)', fontSize: 20, color: 'var(--fs-accent)', opacity: 0.55 }}>◆</div>
+        <div style={{ flexShrink: 0, width: 88, height: 88, borderRadius: '50%', background: 'var(--fs-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 24px rgba(196,149,106,0.2)' }}>
+          <Mail size={38} color="var(--fs-accent)" strokeWidth={1.5} />
+        </div>
+        <div style={{ flex: 1 }}>
+          <h2 style={{ fontFamily: 'UnifrakturMaguntia, cursive', fontSize: 38, color: 'var(--fs-dark)', marginBottom: 10, lineHeight: 1.1 }}>
+            Assine nossa<br />Newsletter
+          </h2>
+          <p style={{ fontFamily: 'Inter, sans-serif', color: 'var(--fs-muted)', fontSize: '0.85rem' }}>
+            Receba lançamentos, vagas exclusivas e promoções do estúdio.
+          </p>
+        </div>
+        <div style={{ flexShrink: 0, display: 'flex', gap: 12 }}>
+          <input type="email" placeholder="Digite seu e-mail..."
+            style={{
+              background: 'var(--fs-surface)', border: '1px solid rgba(61,53,41,0.35)',
+              borderRadius: 8, padding: '14px 20px',
+              fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: 'var(--fs-dark)',
+              outline: 'none', width: 240,
+            }}
+            onFocus={e => (e.currentTarget.style.borderColor = 'var(--fs-accent)')}
+            onBlur={e => (e.currentTarget.style.borderColor = 'rgba(61,53,41,0.35)')}
+          />
+          <button style={{
+            background: 'var(--fs-accent)', color: 'var(--fs-dark)', border: 'none',
+            borderRadius: 8, padding: '14px 28px',
+            fontFamily: 'Cinzel, serif', fontWeight: 700, fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase',
+            cursor: 'pointer', transition: 'background 0.25s', whiteSpace: 'nowrap',
+          }}
+            onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent-light)'}
+            onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent)'}
+          >
+            ASSINAR
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer style={{ background: 'var(--fs-bg)', borderTop: '1px solid var(--fs-divider)', paddingTop: 64, paddingBottom: 32 }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 64px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 48, marginBottom: 56 }}>
+          <div><FourPointStar size={48} /></div>
+          <div style={{ display: 'flex', gap: 64 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              {['PÁGINA INICIAL', 'PORTFÓLIO', 'SOBRE NÓS'].map(l => (
+                <a key={l} href="#" style={{ fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--fs-muted)', textDecoration: 'none', transition: 'color 0.25s' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-accent)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'var(--fs-muted)')}
+                >{l}</a>
+              ))}
+            </div>
+            <div style={{ width: 1, background: 'var(--fs-divider)', alignSelf: 'stretch' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+              {['ORÇAMENTOS', 'PREÇOS', 'DESAFIOS'].map(l => (
+                <a key={l} href="#" style={{ fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--fs-muted)', textDecoration: 'none', transition: 'color 0.25s' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-accent)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'var(--fs-muted)')}
+                >{l}</a>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 12 }}>
+            {([Youtube, Twitter, Instagram] as React.ElementType[]).map((Icon, i) => (
+              <a key={i} href="#" style={{
+                width: 42, height: 42, borderRadius: '50%',
+                border: '1px solid var(--fs-divider)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: 'var(--fs-muted)', textDecoration: 'none',
+                transition: 'border-color 0.25s, color 0.25s',
+              }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = 'var(--fs-accent)'; (e.currentTarget as HTMLAnchorElement).style.color = 'var(--fs-accent)'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = 'var(--fs-divider)'; (e.currentTarget as HTMLAnchorElement).style.color = 'var(--fs-muted)'; }}
+              >
+                <Icon size={17} strokeWidth={1.5} />
+              </a>
+            ))}
+          </div>
+        </div>
+        <div style={{ height: 1, background: 'var(--fs-divider)', marginBottom: 28 }} />
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: 'Inter, sans-serif', fontSize: '0.68rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(138,127,110,0.55)' }}>
+          <div style={{ display: 'flex', gap: 32 }}>
+            {['TERMOS & CONDIÇÕES', 'POLÍTICA DE PRIVACIDADE'].map(l => (
+              <a key={l} href="#" style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.25s' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-muted)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(138,127,110,0.55)')}
+              >{l}</a>
+            ))}
+          </div>
+          <span>© 2024 FIGHTING STAR. TODOS OS DIREITOS RESERVADOS.</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+export default function Home() {
+  return (
+    <div style={{ background: 'var(--fs-bg)', color: 'var(--fs-text)', fontFamily: 'Inter, sans-serif', overflowX: 'hidden', minHeight: '100vh' }}>
+      <div className="fs-noise" />
+      <Navbar />
+      <main>
+        <HeroSection />
+        <PartnersStrip />
+        <PortfolioSection />
+        <TestimonialsSection />
+        <FaqSection />
+        <NewsletterSection />
+      </main>
+      <Footer />
+    </div>
+  );
+}
