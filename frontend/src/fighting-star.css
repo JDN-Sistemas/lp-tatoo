@@ -1,13 +1,15 @@
 :root {
-  --fs-bg:           #1A1610;
-  --fs-bg2:          #26211A;
-  --fs-accent:       #C4956A;
-  --fs-accent-light: #E8C99A;
+  --fs-bg:           #080808;
+  --fs-bg2:          #111111;
+  --fs-accent:       #72E015;
+  --fs-accent-light: #A3D957;
+  --fs-green:        #72E015;
+  --fs-green-dark:   #4A9A0A;
   --fs-surface:      #F5F0E8;
   --fs-text:         #F0EAD6;
   --fs-muted:        #8A7F6E;
-  --fs-dark:         #1A1610;
-  --fs-divider:      #3D3529;
+  --fs-dark:         #080808;
+  --fs-divider:      #222222;
 }
 
 @keyframes float {

@@ -67,7 +67,7 @@ function Navbar() {
     }}>
       <div style={{
         width: 'fit-content',
-        background: scrolled ? 'rgba(50,42,30,0.98)' : 'rgba(50,42,30,0.92)',
+        background: scrolled ? 'rgba(18,18,18,0.98)' : 'rgba(14,14,14,0.92)',
         backdropFilter: 'blur(12px)',
         border: '1px solid var(--fs-divider)',
         borderRadius: 50,
@@ -79,7 +79,7 @@ function Navbar() {
         <div style={{ display: 'flex', gap: 48 }}>
           {[{ label: 'INÍCIO', href: '#inicio' }, { label: 'PORTFÓLIO', href: '#portfolio' }].map(({ label, href }) => (
             <a key={label} href={href} style={linkStyle}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-accent)')}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-green)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'var(--fs-text)')}
             >{label}</a>
           ))}
@@ -88,7 +88,7 @@ function Navbar() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 36 }}>
           {[{ label: 'DEPOIMENTOS', href: '#depoimentos' }, { label: 'FAQ', href: '#faq' }].map(({ label, href }) => (
             <a key={label} href={href} style={linkStyle}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-accent)')}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-green)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'var(--fs-text)')}
             >{label}</a>
           ))}
@@ -103,17 +103,14 @@ function HeroSection() {
   const textRef = useReveal();
   return (
     <section id="inicio" style={{ minHeight: '100dvh', paddingTop: 72, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
-      <div className="fs-blob" style={{ width: 500, height: 500, right: '30%', top: '50%', transform: 'translateY(-50%)', opacity: 0.12 }} />
+      <div className="fs-blob" style={{ width: 500, height: 500, right: '30%', top: '50%', transform: 'translateY(-50%)', opacity: 0.05 }} />
       <div className="fs-blob" style={{ width: 300, height: 300, left: '-80px', bottom: '10%', opacity: 0.07, borderRadius: '50%' }} />
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 64px', width: '100%', display: 'flex', alignItems: 'center', gap: 40 }}>
         <div ref={textRef} className="fs-fade-up" style={{ flex: '0 0 45%', paddingRight: 40, paddingTop: 48, paddingBottom: 48 }}>
-          <h1 style={{ fontFamily: 'Cormorant Garamond, serif', fontWeight: 700, fontSize: 68, lineHeight: 1.1, marginBottom: 24 }}>
-            <span style={{ display: 'block', color: 'var(--fs-text)' }}>Ninja</span>
+          <h1 style={{ fontFamily: 'Cinzel Decorative, serif', fontWeight: 700, fontSize: 68, lineHeight: 1.1, marginBottom: 24 }}>
+            <span style={{ display: 'block', fontStyle: 'italic', color: 'var(--fs-accent)' }}>Ninja</span>
             <span style={{ display: 'block', color: 'var(--fs-text)' }}>no preto</span>
-            <span style={{ display: 'block' }}>
-              e{' '}
-              <span style={{ fontStyle: 'italic', color: 'var(--fs-accent)' }}>cinza</span>
-            </span>
+            <span style={{ display: 'block', color: 'var(--fs-text)' }}>e cinza</span>
             {/* <span style={{ display: 'block', color: 'var(--fs-text)', fontSize: 44 }}>Premiado em</span>
             <span style={{ display: 'block', color: 'var(--fs-text)', fontSize: 44 }}>convenção</span> */}
           </h1>
@@ -121,9 +118,9 @@ function HeroSection() {
             <span style={{ color: 'var(--fs-accent)', fontSize: '1rem', opacity: 0.7 }}>◆</span>
             <button
               style={{
-                background: 'var(--fs-accent)',
-                color: 'var(--fs-dark)',
-                border: '2px solid rgba(26,22,16,0.25)',
+                background: 'transparent',
+                color: 'var(--fs-accent)',
+                border: '2px solid var(--fs-accent)',
                 borderRadius: 8,
                 fontFamily: 'Cinzel, serif',
                 fontWeight: 700,
@@ -135,11 +132,11 @@ function HeroSection() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 0,
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                boxShadow: '0 6px 28px rgba(196,149,106,0.4)',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease, background 0.25s ease, color 0.25s ease',
+                boxShadow: '0 6px 28px rgba(114,224,21,0.18)',
               }}
-              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.04)'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)'; }}
+              onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.transform = 'scale(1.04)'; b.style.background = 'var(--fs-accent)'; b.style.color = 'var(--fs-dark)'; }}
+              onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.transform = 'scale(1)'; b.style.background = 'transparent'; b.style.color = 'var(--fs-accent)'; }}
               onClick={() => window.open(WHATSAPP_URL, '_blank')}
             >
               AGENDAR VISITA
@@ -166,7 +163,7 @@ function HeroSection() {
               position: 'absolute',
               top: '15%', right: '20%',
               width: '80%', height: '78%',
-              zIndex: 0, opacity: 0.85,
+              zIndex: 0, opacity: 0.14,
             }}
           >
             <rect x="60" y="0" width="340" height="320" rx="18" fill="var(--fs-accent)" />
@@ -227,7 +224,7 @@ function PortfolioSection() {
       <div className="fs-blob" style={{ width: 600, height: 600, left: -200, top: 100, opacity: 0.08 }} />
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 64px', position: 'relative', zIndex: 1 }}>
         <div ref={headRef} className="fs-fade-up" style={{ marginBottom: 64 }}>
-          <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 52, lineHeight: 1.1, color: 'var(--fs-text)', maxWidth: 600 }}>
+          <h2 style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: 52, lineHeight: 1.1, color: 'var(--fs-text)', whiteSpace: 'nowrap' }}>
             Tatuador premiado em convenção!
           </h2>
         </div>
@@ -239,7 +236,7 @@ function PortfolioSection() {
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 160, background: 'linear-gradient(to top, rgba(26,22,16,0.92), transparent)' }} />
               <div style={{ position: 'absolute', bottom: 24, left: 24 }}>
                 <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.65rem', letterSpacing: '0.14em', color: 'var(--fs-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Artista Principal</p>
-                <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem', color: 'var(--fs-accent-light)' }}>Fighting Star</p>
+                <p style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: '1.4rem', color: 'var(--fs-accent-light)' }}>Fighting Star</p>
               </div>
             </div>
           </div>
@@ -264,7 +261,7 @@ function PortfolioSection() {
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 60%, rgba(26,22,16,0.7))' }} />
             </div>
             <div style={{ background: 'var(--fs-bg2)', borderRadius: 12, padding: 32, border: '1px solid var(--fs-divider)', display: 'flex', flexDirection: 'column', gap: 16, flex: 1 }}>
-              <h3 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.9rem', color: 'var(--fs-accent-light)', lineHeight: 1.15 }}>
+              <h3 style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: '1.9rem', color: 'var(--fs-accent-light)', lineHeight: 1.15 }}>
                 O estúdio de tatuagem mais bem avaliado da cidade.
               </h3>
               <p style={{ color: 'var(--fs-muted)', fontSize: '0.85rem', lineHeight: 1.65 }}>
@@ -323,7 +320,7 @@ function TestimonialsSection() {
       <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 64px' }}>
         <div ref={ref} className="fs-fade-up" style={{ textAlign: 'center', marginBottom: 56 }}>
           <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.7rem', letterSpacing: '0.2em', color: 'var(--fs-accent)', textTransform: 'uppercase', marginBottom: 16 }}>Depoimentos</p>
-          <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 52, color: 'var(--fs-text)', lineHeight: 1.1 }}>
+          <h2 style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: 52, color: 'var(--fs-text)', lineHeight: 1.1 }}>
             O Que Nossos<br />Clientes Dizem
           </h2>
         </div>
@@ -353,14 +350,14 @@ function TestimonialsSection() {
           <button onClick={() => setIdx(p => Math.max(0, p - 1))} disabled={idx === 0}
             style={{
               position: 'absolute', left: -24, top: '50%', transform: 'translateY(-50%)',
-              width: 48, height: 48, borderRadius: '50%', background: 'var(--fs-accent)',
-              border: 'none', cursor: idx === 0 ? 'not-allowed' : 'pointer',
+              width: 48, height: 48, borderRadius: '50%', background: 'rgba(114,224,21,0.1)',
+              border: '1px solid var(--fs-accent)', cursor: idx === 0 ? 'not-allowed' : 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--fs-dark)', opacity: idx === 0 ? 0.4 : 1,
-              boxShadow: '0 4px 16px rgba(196,149,106,0.3)', transition: 'background 0.2s', zIndex: 2,
+              color: 'var(--fs-accent)', opacity: idx === 0 ? 0.3 : 1,
+              boxShadow: '0 4px 16px rgba(114,224,21,0.12)', transition: 'background 0.2s', zIndex: 2,
             }}
-            onMouseEnter={e => idx > 0 && ((e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent-light)')}
-            onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent)')}
+            onMouseEnter={e => idx > 0 && ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(114,224,21,0.22)')}
+            onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(114,224,21,0.1)')}
           >
             <ChevronLeft size={22} />
           </button>
@@ -384,14 +381,14 @@ function TestimonialsSection() {
           <button onClick={() => setIdx(p => Math.min(TESTIMONIALS.length - 1, p + 1))} disabled={idx === TESTIMONIALS.length - 1}
             style={{
               position: 'absolute', right: -24, top: '50%', transform: 'translateY(-50%)',
-              width: 48, height: 48, borderRadius: '50%', background: 'var(--fs-accent)',
-              border: 'none', cursor: idx === TESTIMONIALS.length - 1 ? 'not-allowed' : 'pointer',
+              width: 48, height: 48, borderRadius: '50%', background: 'rgba(114,224,21,0.1)',
+              border: '1px solid var(--fs-accent)', cursor: idx === TESTIMONIALS.length - 1 ? 'not-allowed' : 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--fs-dark)', opacity: idx === TESTIMONIALS.length - 1 ? 0.4 : 1,
-              boxShadow: '0 4px 16px rgba(196,149,106,0.3)', transition: 'background 0.2s', zIndex: 2,
+              color: 'var(--fs-accent)', opacity: idx === TESTIMONIALS.length - 1 ? 0.3 : 1,
+              boxShadow: '0 4px 16px rgba(114,224,21,0.12)', transition: 'background 0.2s', zIndex: 2,
             }}
-            onMouseEnter={e => idx < TESTIMONIALS.length - 1 && ((e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent-light)')}
-            onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent)')}
+            onMouseEnter={e => idx < TESTIMONIALS.length - 1 && ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(114,224,21,0.22)')}
+            onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(114,224,21,0.1)')}
           >
             <ChevronRight size={22} />
           </button>
@@ -438,7 +435,7 @@ function FaqSection() {
       <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 64px', position: 'relative', zIndex: 1 }}>
         <div ref={ref} className="fs-fade-up" style={{ textAlign: 'center', marginBottom: 72 }}>
           <img src="/images/tatuador/logo-tatoo-removebg-preview.png" alt="Logo" style={{ height: 36, width: 36, objectFit: 'contain' }} />
-          <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 48, color: 'var(--fs-text)', marginTop: 20, lineHeight: 1.1 }}>
+          <h2 style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: 48, color: 'var(--fs-text)', marginTop: 20, lineHeight: 1.1 }}>
             Perguntas Frequentes
           </h2>
         </div>
@@ -469,7 +466,7 @@ function FaqSection() {
                     <div style={{
                       fontFamily: 'Inter, sans-serif', color: 'var(--fs-muted)',
                       fontSize: '0.9rem', lineHeight: 1.8, paddingBottom: 32,
-                      paddingLeft: 20, borderLeft: '2px solid rgba(196,149,106,0.25)',
+                      paddingLeft: 20, borderLeft: '2px solid rgba(114,224,21,0.2)',
                       whiteSpace: 'pre-line',
                     }}>
                       {faq.a}
