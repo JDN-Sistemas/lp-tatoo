@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   ArrowRight, Clock, Layers, Zap, Circle, BookOpen, Search,
-  Star, ChevronLeft, ChevronRight, Plus, Mail,
+  Star, ChevronLeft, ChevronRight, Plus,
   Youtube, Twitter, Instagram
 } from 'lucide-react';
 import '../fighting-star.css';
+
+const WHATSAPP_URL = 'https://wa.me/5500000000000?text=Olá!%20Gostaria%20de%20agendar%20uma%20visita.';
 
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null);
@@ -24,8 +26,15 @@ function useReveal() {
 function FourPointStar({ size = 28, color = 'var(--fs-accent)' }: { size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M16 0 C16 0 17.5 12 20 16 C17.5 20 16 32 16 32 C16 32 14.5 20 12 16 C14.5 12 16 0 16 0Z" fill={color} />
-      <path d="M0 16 C0 16 12 14.5 16 12 C20 14.5 32 16 32 16 C32 16 20 17.5 16 20 C12 17.5 0 16 0 16Z" fill={color} />
+      {/* blade */}
+      <polygon points="16,1 18,9 14,9" fill={color} />
+      <rect x="14.5" y="9" width="3" height="10" fill={color} />
+      {/* crossguard */}
+      <rect x="9" y="19" width="14" height="2.5" rx="1" fill={color} />
+      {/* handle */}
+      <rect x="14" y="21.5" width="4" height="7" rx="1.5" fill={color} />
+      {/* pommel */}
+      <ellipse cx="16" cy="29.5" rx="3.5" ry="2" fill={color} />
     </svg>
   );
 }
@@ -43,7 +52,7 @@ function Navbar() {
     fontSize: '0.7rem',
     letterSpacing: '0.15em',
     textTransform: 'uppercase',
-    color: 'var(--fs-muted)',
+    color: 'var(--fs-text)',
     textDecoration: 'none',
     transition: 'color 0.25s ease',
     cursor: 'pointer',
@@ -51,35 +60,40 @@ function Navbar() {
 
   return (
     <nav style={{
-      position: 'fixed', top: 0, left: 0, right: 0, height: 72, zIndex: 100,
-      background: scrolled ? 'rgba(26,22,16,0.95)' : 'rgba(26,22,16,0.85)',
-      backdropFilter: 'blur(12px)',
-      borderBottom: '1px solid var(--fs-divider)',
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+      padding: '32px 0',
       transition: 'background 0.3s ease',
-      display: 'flex', alignItems: 'center',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
       <div style={{
-        maxWidth: 1200, margin: '0 auto', width: '100%', padding: '0 64px',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        width: 'fit-content',
+        background: scrolled ? 'rgba(50,42,30,0.98)' : 'rgba(50,42,30,0.92)',
+        backdropFilter: 'blur(12px)',
+        border: '1px solid var(--fs-divider)',
+        borderRadius: 50,
+        padding: '0 56px',
+        height: 64,
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 56,
+        transition: 'background 0.3s ease',
       }}>
-        <div style={{ display: 'flex', gap: 36 }}>
-          {['PÁGINA INICIAL', 'PORTFÓLIO', 'SOBRE NÓS'].map(l => (
-            <a key={l} href="#" style={linkStyle}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-text)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--fs-muted)')}
-            >{l}</a>
+        <div style={{ display: 'flex', gap: 48 }}>
+          {[{ label: 'INÍCIO', href: '#inicio' }, { label: 'PORTFÓLIO', href: '#portfolio' }].map(({ label, href }) => (
+            <a key={label} href={href} style={linkStyle}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-accent)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--fs-text)')}
+            >{label}</a>
           ))}
         </div>
-        <FourPointStar size={26} />
+        <img src="/images/tatuador/logo-tatoo-removebg-preview.png" alt="Logo" style={{ height: 120, width: 120, objectFit: 'contain' }} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 36 }}>
-          <div style={{ width: 1, height: 20, background: 'var(--fs-divider)' }} />
-          {['ORÇAMENTOS', 'PREÇOS', 'DESAFIOS'].map(l => (
-            <a key={l} href="#" style={linkStyle}
-              onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-text)')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'var(--fs-muted)')}
-            >{l}</a>
+          {[{ label: 'DEPOIMENTOS', href: '#depoimentos' }, { label: 'FAQ', href: '#faq' }].map(({ label, href }) => (
+            <a key={label} href={href} style={linkStyle}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-accent)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--fs-text)')}
+            >{label}</a>
           ))}
         </div>
+
       </div>
     </nav>
   );
@@ -88,43 +102,50 @@ function Navbar() {
 function HeroSection() {
   const textRef = useReveal();
   return (
-    <section style={{ minHeight: '100dvh', paddingTop: 72, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+    <section id="inicio" style={{ minHeight: '100dvh', paddingTop: 72, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
       <div className="fs-blob" style={{ width: 500, height: 500, right: '30%', top: '50%', transform: 'translateY(-50%)', opacity: 0.12 }} />
       <div className="fs-blob" style={{ width: 300, height: 300, left: '-80px', bottom: '10%', opacity: 0.07, borderRadius: '50%' }} />
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 64px', width: '100%', display: 'flex', alignItems: 'center', gap: 40 }}>
         <div ref={textRef} className="fs-fade-up" style={{ flex: '0 0 45%', paddingRight: 40, paddingTop: 48, paddingBottom: 48 }}>
-          <h1 style={{ fontFamily: 'UnifrakturMaguntia, cursive', fontSize: 72, lineHeight: 1.08, marginBottom: 28 }}>
-            <span style={{ display: 'block', color: 'var(--fs-text)' }}>Pinturas</span>
-            <span style={{ display: 'block', color: 'var(--fs-text)' }}>Corporais</span>
-            <span style={{ display: 'block', color: 'var(--fs-text)' }}>
-              que{' '}
-              <span style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', color: 'var(--fs-accent)' }}>
-                Desafiam
-              </span>
+          <h1 style={{ fontFamily: 'Cormorant Garamond, serif', fontWeight: 700, fontSize: 68, lineHeight: 1.1, marginBottom: 24 }}>
+            <span style={{ display: 'block', color: 'var(--fs-text)' }}>Ninja</span>
+            <span style={{ display: 'block', color: 'var(--fs-text)' }}>no preto</span>
+            <span style={{ display: 'block' }}>
+              e{' '}
+              <span style={{ fontStyle: 'italic', color: 'var(--fs-accent)' }}>cinza</span>
             </span>
-            <span style={{ display: 'block', color: 'var(--fs-text)' }}>Sua Alma</span>
+            {/* <span style={{ display: 'block', color: 'var(--fs-text)', fontSize: 44 }}>Premiado em</span>
+            <span style={{ display: 'block', color: 'var(--fs-text)', fontSize: 44 }}>convenção</span> */}
           </h1>
-          <p className="fs-fade-up fs-delay-1" style={{ color: 'var(--fs-muted)', fontSize: '1.05rem', lineHeight: 1.65, maxWidth: 380, marginBottom: 40 }}>
-            Arte permanente feita para quem não tem medo de sentir.
-          </p>
-          <button
-            className="fs-fade-up fs-delay-2"
-            style={{
-              background: 'var(--fs-accent)', color: 'var(--fs-dark)',
-              border: 'none', borderRadius: 50,
-              fontFamily: 'Cinzel, serif', fontWeight: 700,
-              fontSize: '0.72rem', letterSpacing: '0.18em', textTransform: 'uppercase',
-              padding: '16px 36px', cursor: 'pointer',
-              display: 'inline-flex', alignItems: 'center', gap: 12,
-              transition: 'background 0.25s ease, transform 0.2s ease',
-              boxShadow: '0 4px 24px rgba(196,149,106,0.3)',
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent-light)'; (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.04)'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent)'; (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)'; }}
-          >
-            AGENDAR VISITA
-            <ArrowRight size={17} />
-          </button>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 14, marginTop: 8 }}>
+            <span style={{ color: 'var(--fs-accent)', fontSize: '1rem', opacity: 0.7 }}>◆</span>
+            <button
+              style={{
+                background: 'var(--fs-accent)',
+                color: 'var(--fs-dark)',
+                border: '2px solid rgba(26,22,16,0.25)',
+                borderRadius: 8,
+                fontFamily: 'Cinzel, serif',
+                fontWeight: 700,
+                fontSize: '0.72rem',
+                letterSpacing: '0.25em',
+                textTransform: 'uppercase',
+                padding: '16px 44px',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 0,
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                boxShadow: '0 6px 28px rgba(196,149,106,0.4)',
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1.04)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'scale(1)'; }}
+              onClick={() => window.open(WHATSAPP_URL, '_blank')}
+            >
+              AGENDAR VISITA
+            </button>
+            <span style={{ color: 'var(--fs-accent)', fontSize: '1rem', opacity: 0.7 }}>◆</span>
+          </div>
           <div className="fs-fade-up fs-delay-3" style={{ marginTop: 40, display: 'flex', flexDirection: 'column', gap: 6 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
               <Clock size={15} color="var(--fs-accent)" />
@@ -136,27 +157,25 @@ function HeroSection() {
             </div>
           </div>
         </div>
-        <div style={{ flex: '0 0 55%', position: 'relative', height: 700 }}>
-          <div style={{ position: 'absolute', inset: 0, borderRadius: 24, overflow: 'hidden', border: '1px solid var(--fs-divider)' }}>
-            <img src="/images/hero-figure.png" alt="Figura tatuada" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+        <div style={{ flex: '0 0 55%', position: 'relative', height: 900 }}>
+          {/* Forma decorativa atrás da imagem */}
+          <svg
+            viewBox="0 0 400 600"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{
+              position: 'absolute',
+              top: '15%', right: '20%',
+              width: '80%', height: '78%',
+              zIndex: 0, opacity: 0.85,
+            }}
+          >
+            <rect x="60" y="0" width="340" height="320" rx="18" fill="var(--fs-accent)" />
+            <rect x="60" y="340" width="100" height="260" rx="14" fill="var(--fs-accent)" />
+            <rect x="300" y="340" width="100" height="260" rx="14" fill="var(--fs-accent)" />
+          </svg>
+          <div style={{ position: 'absolute', inset: 0, borderRadius: 24, overflow: 'hidden', zIndex: 1 }}>
+            <img src="/images/tatuador/tatuador-hero-removebg.png" alt="Figura tatuada" style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center center' }} />
             <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 240, background: 'linear-gradient(to bottom, transparent, var(--fs-bg))' }} />
-          </div>
-          <div className="fs-float" style={{
-            position: 'absolute', bottom: 72, right: -24, zIndex: 10,
-            background: 'var(--fs-surface)', borderRadius: 14, padding: '20px 28px',
-            boxShadow: '0 12px 48px rgba(0,0,0,0.5)', border: '1px solid rgba(196,149,106,0.2)', minWidth: 220,
-          }}>
-            <div style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
-              <div>
-                <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.6rem', color: 'var(--fs-muted)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 6 }}>TEMPO</p>
-                <p style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: '1.15rem', color: 'var(--fs-dark)' }}>2 Semanas</p>
-              </div>
-              <div style={{ width: 1, height: 36, background: 'rgba(61,53,41,0.35)' }} />
-              <div>
-                <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.6rem', color: 'var(--fs-muted)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 6 }}>VALOR</p>
-                <p style={{ fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: '1.15rem', color: 'var(--fs-dark)' }}>R$ 2.100,00</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -204,37 +223,34 @@ function PortfolioSection() {
   });
 
   return (
-    <section style={{ padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
+    <section id="portfolio" style={{ padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
       <div className="fs-blob" style={{ width: 600, height: 600, left: -200, top: 100, opacity: 0.08 }} />
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 64px', position: 'relative', zIndex: 1 }}>
         <div ref={headRef} className="fs-fade-up" style={{ marginBottom: 64 }}>
-          <h2 style={{ fontFamily: 'UnifrakturMaguntia, cursive', fontSize: 52, lineHeight: 1.1, color: 'var(--fs-text)', maxWidth: 600 }}>
-            O Processo Ajustado vai fazer você gritar — e depois, sorrir.
+          <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 52, lineHeight: 1.1, color: 'var(--fs-text)', maxWidth: 600 }}>
+            Tatuador premiado em convenção!
           </h2>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24 }}>
           <div ref={col1Ref} className="fs-fade-up fs-delay-1" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             <div style={{ ...cardStyle(hov === 'artist'), height: 500, background: 'var(--fs-bg2)' }}
               onMouseEnter={() => setHov('artist')} onMouseLeave={() => setHov(null)}>
-              <img src="/images/artist.png" alt="Artista" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+              <img src="/images/tatuador/tatoo17.jpeg" alt="Artista" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 160, background: 'linear-gradient(to top, rgba(26,22,16,0.92), transparent)' }} />
               <div style={{ position: 'absolute', bottom: 24, left: 24 }}>
                 <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.65rem', letterSpacing: '0.14em', color: 'var(--fs-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Artista Principal</p>
-                <p style={{ fontFamily: 'UnifrakturMaguntia, cursive', fontSize: '1.4rem', color: 'var(--fs-accent-light)' }}>Fighting Star</p>
+                <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.4rem', color: 'var(--fs-accent-light)' }}>Fighting Star</p>
               </div>
             </div>
           </div>
           <div ref={col2Ref} className="fs-fade-up fs-delay-2" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             {[
-              { img: '/images/tattoo-gorilla.png', price: 'R$ 2.800,00', label: 'GORILA URBANO' },
-              { img: '/images/tattoo-skull.png', price: 'R$ 1.500,00', label: 'SNAKE & SKULL' },
+              { img: '/images/tatuador/tatoo5.jpeg', price: 'R$ 2.800,00', label: 'GORILA URBANO' },
+              { img: '/images/tatuador/tatoo2.jpeg', price: 'R$ 1.500,00', label: 'SNAKE & SKULL' },
             ].map((item) => (
               <div key={item.label} style={{ ...cardStyle(hov === item.label), background: 'var(--fs-surface)', height: 238 }}
                 onMouseEnter={() => setHov(item.label)} onMouseLeave={() => setHov(null)}>
-                <img src={item.img} alt={item.label} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 12 }} />
-                <div style={{ position: 'absolute', bottom: 14, right: 14, background: 'var(--fs-dark)', border: '1px solid rgba(196,149,106,0.35)', borderRadius: 8, padding: '6px 14px' }}>
-                  <p style={{ fontFamily: 'Cinzel, serif', fontWeight: 700, fontSize: '0.78rem', color: 'var(--fs-accent)', letterSpacing: '0.06em' }}>{item.price}</p>
-                </div>
+                <img src={item.img} alt={item.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 <div style={{ position: 'absolute', top: 14, left: 14 }}>
                   <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.58rem', letterSpacing: '0.12em', color: 'var(--fs-muted)', textTransform: 'uppercase' }}>{item.label}</p>
                 </div>
@@ -244,15 +260,15 @@ function PortfolioSection() {
           <div ref={col3Ref} className="fs-fade-up fs-delay-3" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             <div style={{ ...cardStyle(hov === 'process'), height: 320 }}
               onMouseEnter={() => setHov('process')} onMouseLeave={() => setHov(null)}>
-              <img src="/images/tattoo-process.png" alt="Processo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src="/images/tatuador/tatoo3.jpeg" alt="Processo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 60%, rgba(26,22,16,0.7))' }} />
             </div>
             <div style={{ background: 'var(--fs-bg2)', borderRadius: 12, padding: 32, border: '1px solid var(--fs-divider)', display: 'flex', flexDirection: 'column', gap: 16, flex: 1 }}>
-              <h3 style={{ fontFamily: 'UnifrakturMaguntia, cursive', fontSize: '1.9rem', color: 'var(--fs-accent-light)', lineHeight: 1.15 }}>
-                Highest rated Tatoo Club in the California.
+              <h3 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '1.9rem', color: 'var(--fs-accent-light)', lineHeight: 1.15 }}>
+                O estúdio de tatuagem mais bem avaliado da cidade.
               </h3>
               <p style={{ color: 'var(--fs-muted)', fontSize: '0.85rem', lineHeight: 1.65 }}>
-                Don't hesitate. No one has ever regretted their tatoos! Contact us now, and we'll help you.
+                Tem uma ideia? Me envie por DM!
               </p>
               <button style={{
                 background: 'transparent', border: '1px solid var(--fs-accent)', color: 'var(--fs-accent)',
@@ -262,8 +278,9 @@ function PortfolioSection() {
               }}
                 onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--fs-dark)'; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--fs-accent)'; }}
+                onClick={() => window.open(WHATSAPP_URL, '_blank')}
               >
-                CONTACT US NOW
+                FALE CONOSCO AGORA
               </button>
             </div>
           </div>
@@ -302,11 +319,11 @@ function TestimonialsSection() {
   const ref = useReveal();
 
   return (
-    <section style={{ padding: '120px 0', background: 'var(--fs-bg2)', borderTop: '1px solid var(--fs-divider)', borderBottom: '1px solid var(--fs-divider)' }}>
+    <section id="depoimentos" style={{ padding: '120px 0', background: 'var(--fs-bg2)', borderTop: '1px solid var(--fs-divider)', borderBottom: '1px solid var(--fs-divider)' }}>
       <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 64px' }}>
         <div ref={ref} className="fs-fade-up" style={{ textAlign: 'center', marginBottom: 56 }}>
           <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.7rem', letterSpacing: '0.2em', color: 'var(--fs-accent)', textTransform: 'uppercase', marginBottom: 16 }}>Depoimentos</p>
-          <h2 style={{ fontFamily: 'UnifrakturMaguntia, cursive', fontSize: 52, color: 'var(--fs-text)', lineHeight: 1.1 }}>
+          <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 52, color: 'var(--fs-text)', lineHeight: 1.1 }}>
             O Que Nossos<br />Clientes Dizem
           </h2>
         </div>
@@ -416,12 +433,12 @@ function FaqSection() {
   const ref = useReveal();
 
   return (
-    <section style={{ padding: '120px 0', position: 'relative' }}>
+    <section id="faq" style={{ padding: '120px 0', position: 'relative' }}>
       <div className="fs-blob" style={{ width: 400, height: 400, right: -100, bottom: 0, opacity: 0.06 }} />
       <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 64px', position: 'relative', zIndex: 1 }}>
         <div ref={ref} className="fs-fade-up" style={{ textAlign: 'center', marginBottom: 72 }}>
-          <FourPointStar size={22} />
-          <h2 style={{ fontFamily: 'UnifrakturMaguntia, cursive', fontSize: 48, color: 'var(--fs-text)', marginTop: 20, lineHeight: 1.1 }}>
+          <img src="/images/tatuador/logo-tatoo-removebg-preview.png" alt="Logo" style={{ height: 36, width: 36, objectFit: 'contain' }} />
+          <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 48, color: 'var(--fs-text)', marginTop: 20, lineHeight: 1.1 }}>
             Perguntas Frequentes
           </h2>
         </div>
@@ -469,62 +486,13 @@ function FaqSection() {
   );
 }
 
-function NewsletterSection() {
-  const ref = useReveal();
-  return (
-    <section style={{ padding: '80px 64px 120px', maxWidth: 1200, margin: '0 auto' }}>
-      <div ref={ref} className="fs-fade-up" style={{
-        background: 'var(--fs-surface)', borderRadius: 24, padding: '60px 72px',
-        display: 'flex', alignItems: 'center', gap: 64,
-        position: 'relative', overflow: 'hidden', boxShadow: '0 8px 48px rgba(0,0,0,0.4)',
-      }}>
-        <div style={{ position: 'absolute', left: 28, top: '50%', transform: 'translateY(-50%)', fontSize: 20, color: 'var(--fs-accent)', opacity: 0.55 }}>◆</div>
-        <div style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)', fontSize: 20, color: 'var(--fs-accent)', opacity: 0.55 }}>◆</div>
-        <div style={{ flexShrink: 0, width: 88, height: 88, borderRadius: '50%', background: 'var(--fs-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 24px rgba(196,149,106,0.2)' }}>
-          <Mail size={38} color="var(--fs-accent)" strokeWidth={1.5} />
-        </div>
-        <div style={{ flex: 1 }}>
-          <h2 style={{ fontFamily: 'UnifrakturMaguntia, cursive', fontSize: 38, color: 'var(--fs-dark)', marginBottom: 10, lineHeight: 1.1 }}>
-            Assine nossa<br />Newsletter
-          </h2>
-          <p style={{ fontFamily: 'Inter, sans-serif', color: 'var(--fs-muted)', fontSize: '0.85rem' }}>
-            Receba lançamentos, vagas exclusivas e promoções do estúdio.
-          </p>
-        </div>
-        <div style={{ flexShrink: 0, display: 'flex', gap: 12 }}>
-          <input type="email" placeholder="Digite seu e-mail..."
-            style={{
-              background: 'var(--fs-surface)', border: '1px solid rgba(61,53,41,0.35)',
-              borderRadius: 8, padding: '14px 20px',
-              fontFamily: 'Inter, sans-serif', fontSize: '0.88rem', color: 'var(--fs-dark)',
-              outline: 'none', width: 240,
-            }}
-            onFocus={e => (e.currentTarget.style.borderColor = 'var(--fs-accent)')}
-            onBlur={e => (e.currentTarget.style.borderColor = 'rgba(61,53,41,0.35)')}
-          />
-          <button style={{
-            background: 'var(--fs-accent)', color: 'var(--fs-dark)', border: 'none',
-            borderRadius: 8, padding: '14px 28px',
-            fontFamily: 'Cinzel, serif', fontWeight: 700, fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase',
-            cursor: 'pointer', transition: 'background 0.25s', whiteSpace: 'nowrap',
-          }}
-            onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent-light)'}
-            onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = 'var(--fs-accent)'}
-          >
-            ASSINAR
-          </button>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 function Footer() {
   return (
     <footer style={{ background: 'var(--fs-bg)', borderTop: '1px solid var(--fs-divider)', paddingTop: 64, paddingBottom: 32 }}>
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 64px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 48, marginBottom: 56 }}>
-          <div><FourPointStar size={48} /></div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 48, marginBottom: 56 }}>
+          <div><img src="/images/tatuador/logo-tatoo-removebg-preview.png" alt="Logo" style={{ height: 200, width: 200, objectFit: 'contain' }} /></div>
           <div style={{ display: 'flex', gap: 64 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
               {['PÁGINA INICIAL', 'PORTFÓLIO', 'SOBRE NÓS'].map(l => (
@@ -589,7 +557,6 @@ export default function Home() {
         <PortfolioSection />
         <TestimonialsSection />
         <FaqSection />
-        <NewsletterSection />
       </main>
       <Footer />
     </div>
