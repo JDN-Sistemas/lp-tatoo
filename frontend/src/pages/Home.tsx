@@ -289,26 +289,26 @@ function PortfolioSection() {
 
 const TESTIMONIALS = [
   {
-    name: 'MARINA C.', initials: 'MC', gradient: 'linear-gradient(135deg, #8B4513, #C4956A)',
+    name: 'MARINA C.', initials: 'MC', gradient: 'linear-gradient(135deg, #0d1a06, #2a4a10)',
     quote: '"Fiquei mais feliz com o resultado do que com minhas expectativas. Arte que marca a alma para sempre."',
     stars: 5,
   },
   {
-    name: 'RAFAEL S.', initials: 'RS', gradient: 'linear-gradient(135deg, #2C1810, #C4956A)',
+    name: 'RAFAEL S.', initials: 'RS', gradient: 'linear-gradient(135deg, #0a0a0a, #1e3808)',
     quote: '"Designs mais intrincados e detalhados exigem mais tempo e habilidade — aqui isso é levado a sério. O cuidado com cada traço é incomparável."',
     stars: 5,
   },
   {
-    name: 'JULIA M.', initials: 'JM', gradient: 'linear-gradient(135deg, #3D2B1F, #E8C99A)',
+    name: 'JULIA M.', initials: 'JM', gradient: 'linear-gradient(135deg, #111a08, #3a5a18)',
     quote: '"Tatuagens com cor geralmente custam mais do que preto e cinza. Cores vibrantes podem exigir mais trabalho — e vale cada centavo."',
     stars: 5,
   },
 ];
 
 const AVATARS = [
-  { initials: 'DK', gradient: 'linear-gradient(135deg, #1A1610, #8A7F6E)' },
+  { initials: 'DK', gradient: 'linear-gradient(135deg, #080808, #141414)' },
   ...TESTIMONIALS.map(t => ({ initials: t.initials, gradient: t.gradient })),
-  { initials: 'AT', gradient: 'linear-gradient(135deg, #26211A, #C4956A)' },
+  { initials: 'AT', gradient: 'linear-gradient(135deg, #0d1a06, #1e3808)' },
 ];
 
 function TestimonialsSection() {
