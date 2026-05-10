@@ -289,30 +289,51 @@ function PortfolioSection() {
 
 const TESTIMONIALS = [
   {
-    name: 'MARINA C.', initials: 'MC', gradient: 'linear-gradient(135deg, #0d1a06, #2a4a10)',
-    quote: '"Fiquei mais feliz com o resultado do que com minhas expectativas. Arte que marca a alma para sempre."',
+    name: 'VINICIUS EDUARDO', initials: 'VE', gradient: 'linear-gradient(135deg, #0d1a06, #2a4a10)',
+    quote: '"Muito bem recebido, minha tatuagem não descascou, muita pouca dor, o homem sabe oq faz!"',
     stars: 5,
   },
   {
-    name: 'RAFAEL S.', initials: 'RS', gradient: 'linear-gradient(135deg, #0a0a0a, #1e3808)',
-    quote: '"Designs mais intrincados e detalhados exigem mais tempo e habilidade — aqui isso é levado a sério. O cuidado com cada traço é incomparável."',
+    name: 'AGNALDO JÚNIOR', initials: 'AJ', gradient: 'linear-gradient(135deg, #0a0a0a, #1e3808)',
+    quote: '"Fiz um dragão no braço e ficou excelente. Foram mais de 8h de seção e o atendimento foi espetacular do início ao fim."',
     stars: 5,
   },
   {
-    name: 'JULIA M.', initials: 'JM', gradient: 'linear-gradient(135deg, #111a08, #3a5a18)',
-    quote: '"Tatuagens com cor geralmente custam mais do que preto e cinza. Cores vibrantes podem exigir mais trabalho — e vale cada centavo."',
+    name: 'JAO', initials: 'J_', gradient: 'linear-gradient(135deg, #0d1a06, #1a3206)',
+    quote: '"Foi incrível, fez um trabalho excelente tirou todas as minhas dúvidas, me ajudou com os cuidados da tatuagem."',
+    stars: 5,
+  },
+  {
+    name: 'ALINE MARIELA', initials: 'AM', gradient: 'linear-gradient(135deg, #111a08, #3a5a18)',
+    quote: '"Ótimo atendimento, ótimo trabalho, espero fazer muito mais tattoos, só experiência boa."',
+    stars: 5,
+  },
+  {
+    name: 'ANDREA FINGER', initials: 'AF', gradient: 'linear-gradient(135deg, #080808, #182e08)',
+    quote: '"Profissionalismo do início ao fim. Mão leve, trabalho impecável e um preço muito justo. Recomendo de olhos fechados."',
+    stars: 5,
+  },
+  {
+    name: 'WILLIAM JDS', initials: 'WJ', gradient: 'linear-gradient(135deg, #0a0a0a, #243a10)',
+    quote: '"Faz um excelente trabalho. Detalhista e mão leve. Já fiz três e faria outras, recomendo."',
+    stars: 5,
+  },
+  {
+    name: 'MARIA CHRISTOPHER', initials: 'MC', gradient: 'linear-gradient(135deg, #0d1a06, #2a4a10)',
+    quote: '"Tatuador brabo dms, muito educado e lugar show de bola."',
+    stars: 5,
+  },
+  {
+    name: 'LUANA MOLINA', initials: 'LM', gradient: 'linear-gradient(135deg, #111a08, #3a5a18)',
+    quote: '"Excelente profissional, minha Tatoo ficou perfeita, do jeitinho que eu planejei, cicatrizou super tranquilo, traços perfeitos."',
     stars: 5,
   },
 ];
 
-const AVATARS = [
-  { initials: 'DK', gradient: 'linear-gradient(135deg, #080808, #141414)' },
-  ...TESTIMONIALS.map(t => ({ initials: t.initials, gradient: t.gradient })),
-  { initials: 'AT', gradient: 'linear-gradient(135deg, #0d1a06, #1e3808)' },
-];
+const AVATARS = TESTIMONIALS.map(t => ({ initials: t.initials, gradient: t.gradient }));
 
 function TestimonialsSection() {
-  const [idx, setIdx] = useState(1);
+  const [idx, setIdx] = useState(0);
   const ref = useReveal();
 
   return (
@@ -326,9 +347,9 @@ function TestimonialsSection() {
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 16, marginBottom: 48 }}>
           {AVATARS.map((av, i) => {
-            const active = i === idx + 1;
+            const active = i === idx;
             return (
-              <div key={i} onClick={() => { if (i >= 1 && i <= 3) setIdx(i - 1); }}
+              <div key={i} onClick={() => setIdx(i)}
                 style={{
                   width: active ? 58 : 42, height: active ? 58 : 42, borderRadius: '50%', background: av.gradient,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -337,7 +358,7 @@ function TestimonialsSection() {
                   border: active ? '2px solid var(--fs-accent)' : '2px solid transparent',
                   boxShadow: active ? '0 0 18px rgba(196,149,106,0.35)' : 'none',
                   opacity: active ? 1 : 0.5,
-                  cursor: i >= 1 && i <= 3 ? 'pointer' : 'default',
+                  cursor: 'pointer',
                   transition: 'all 0.3s ease',
                 }}
               >
@@ -347,16 +368,16 @@ function TestimonialsSection() {
           })}
         </div>
         <div style={{ position: 'relative' }}>
-          <button onClick={() => setIdx(p => Math.max(0, p - 1))} disabled={idx === 0}
+          <button onClick={() => setIdx(p => (p - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
             style={{
               position: 'absolute', left: -24, top: '50%', transform: 'translateY(-50%)',
               width: 48, height: 48, borderRadius: '50%', background: 'rgba(114,224,21,0.1)',
-              border: '1px solid var(--fs-accent)', cursor: idx === 0 ? 'not-allowed' : 'pointer',
+              border: '1px solid var(--fs-accent)', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--fs-accent)', opacity: idx === 0 ? 0.3 : 1,
+              color: 'var(--fs-accent)', opacity: 1,
               boxShadow: '0 4px 16px rgba(114,224,21,0.12)', transition: 'background 0.2s', zIndex: 2,
             }}
-            onMouseEnter={e => idx > 0 && ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(114,224,21,0.22)')}
+            onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(114,224,21,0.22)')}
             onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(114,224,21,0.1)')}
           >
             <ChevronLeft size={22} />
@@ -378,16 +399,16 @@ function TestimonialsSection() {
               — {TESTIMONIALS[idx].name}
             </p>
           </div>
-          <button onClick={() => setIdx(p => Math.min(TESTIMONIALS.length - 1, p + 1))} disabled={idx === TESTIMONIALS.length - 1}
+          <button onClick={() => setIdx(p => (p + 1) % TESTIMONIALS.length)}
             style={{
               position: 'absolute', right: -24, top: '50%', transform: 'translateY(-50%)',
               width: 48, height: 48, borderRadius: '50%', background: 'rgba(114,224,21,0.1)',
-              border: '1px solid var(--fs-accent)', cursor: idx === TESTIMONIALS.length - 1 ? 'not-allowed' : 'pointer',
+              border: '1px solid var(--fs-accent)', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--fs-accent)', opacity: idx === TESTIMONIALS.length - 1 ? 0.3 : 1,
+              color: 'var(--fs-accent)', opacity: 1,
               boxShadow: '0 4px 16px rgba(114,224,21,0.12)', transition: 'background 0.2s', zIndex: 2,
             }}
-            onMouseEnter={e => idx < TESTIMONIALS.length - 1 && ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(114,224,21,0.22)')}
+            onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(114,224,21,0.22)')}
             onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(114,224,21,0.1)')}
           >
             <ChevronRight size={22} />
