@@ -1,3 +1,11 @@
+img {
+  max-width: 100%;
+}
+
+html {
+  overflow-x: hidden;
+}
+
 :root {
   --fs-bg:           #080808;
   --fs-bg2:          #111111;

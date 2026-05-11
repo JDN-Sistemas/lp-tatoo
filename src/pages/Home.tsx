@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   ArrowRight, Clock, Layers, Zap, Circle, BookOpen, Search,
-  Star, ChevronLeft, ChevronRight, Plus,
+  Star, ChevronLeft, ChevronRight, Plus, Menu, X,
   Youtube, Twitter, Instagram
 } from 'lucide-react';
 import '../fighting-star.css';
@@ -15,7 +15,7 @@ function useReveal() {
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { el.classList.add('fs-visible'); obs.disconnect(); } },
-      { threshold: 0.12 }
+      { threshold: 0 }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -23,17 +23,23 @@ function useReveal() {
   return ref;
 }
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return isMobile;
+}
+
 function FourPointStar({ size = 28, color = 'var(--fs-accent)' }: { size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* blade */}
       <polygon points="16,1 18,9 14,9" fill={color} />
       <rect x="14.5" y="9" width="3" height="10" fill={color} />
-      {/* crossguard */}
       <rect x="9" y="19" width="14" height="2.5" rx="1" fill={color} />
-      {/* handle */}
       <rect x="14" y="21.5" width="4" height="7" rx="1.5" fill={color} />
-      {/* pommel */}
       <ellipse cx="16" cy="29.5" rx="3.5" ry="2" fill={color} />
     </svg>
   );
@@ -41,11 +47,19 @@ function FourPointStar({ size = 28, color = 'var(--fs-accent)' }: { size?: numbe
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const isMobile = useIsMobile();
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Close menu on resize to desktop
+  useEffect(() => {
+    if (!isMobile) setMenuOpen(false);
+  }, [isMobile]);
 
   const linkStyle: React.CSSProperties = {
     fontFamily: 'Cinzel, serif',
@@ -57,6 +71,59 @@ function Navbar() {
     transition: 'color 0.25s ease',
     cursor: 'pointer',
   };
+
+  if (isMobile) {
+    return (
+      <>
+        <nav style={{
+          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+          background: scrolled ? 'rgba(18,18,18,0.98)' : 'rgba(14,14,14,0.92)',
+          backdropFilter: 'blur(12px)',
+          borderBottom: '1px solid var(--fs-divider)',
+          padding: '0 20px',
+          height: 64,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          transition: 'background 0.3s ease',
+        }}>
+          <img src="/images/tatuador/logo-tatoo-removebg-preview.png" alt="Logo" style={{ height: 56, width: 56, objectFit: 'contain' }} />
+          <button
+            onClick={() => setMenuOpen(v => !v)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--fs-text)', padding: 8, display: 'flex', alignItems: 'center' }}
+          >
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </nav>
+
+        {/* Mobile dropdown menu */}
+        <div style={{
+          position: 'fixed', top: 64, left: 0, right: 0, zIndex: 99,
+          background: 'rgba(14,14,14,0.98)',
+          backdropFilter: 'blur(12px)',
+          borderBottom: '1px solid var(--fs-divider)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0,
+          maxHeight: menuOpen ? 300 : 0,
+          overflow: 'hidden',
+          transition: 'max-height 0.35s ease',
+        }}>
+          {[
+            { label: 'INÍCIO', href: '#inicio' },
+            { label: 'PORTFÓLIO', href: '#portfolio' },
+            { label: 'DEPOIMENTOS', href: '#depoimentos' },
+            { label: 'FAQ', href: '#faq' },
+          ].map(({ label, href }) => (
+            <a
+              key={label}
+              href={href}
+              onClick={() => setMenuOpen(false)}
+              style={{ ...linkStyle, padding: '18px 0', width: '100%', textAlign: 'center', borderBottom: '1px solid var(--fs-divider)' }}
+            >
+              {label}
+            </a>
+          ))}
+        </div>
+      </>
+    );
+  }
 
   return (
     <nav style={{
@@ -93,7 +160,6 @@ function Navbar() {
             >{label}</a>
           ))}
         </div>
-
       </div>
     </nav>
   );
@@ -101,6 +167,73 @@ function Navbar() {
 
 function HeroSection() {
   const textRef = useReveal();
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <section id="inicio" style={{ minHeight: '100dvh', paddingTop: 64, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+        <div className="fs-blob" style={{ width: 300, height: 300, right: '-80px', top: '30%', opacity: 0.05 }} />
+        <div style={{ width: '100%', padding: '0 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+          {/* Hero image on mobile */}
+          <div style={{ position: 'relative', width: '100%', maxWidth: 360, height: 'min(300px, 42vh)', marginBottom: 8 }}>
+            <img
+              src="/images/tatuador/tatuador-hero-removebg.png"
+              alt="Figura tatuada"
+              style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center bottom' }}
+            />
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(to bottom, transparent, var(--fs-bg))' }} />
+          </div>
+
+          <div style={{ paddingBottom: 40, animation: 'fadeInUp 0.7s ease 0.2s both' }}>
+            <h1 style={{ fontFamily: 'Cinzel Decorative, serif', fontWeight: 700, fontSize: 'clamp(26px, 9vw, 40px)', lineHeight: 1.15, marginBottom: 24 }}>
+              <span style={{ display: 'block', fontStyle: 'italic', color: 'var(--fs-accent)' }}>Ninja</span>
+              <span style={{ display: 'block', color: 'var(--fs-text)' }}>no preto</span>
+              <span style={{ display: 'block', color: 'var(--fs-text)' }}>e cinza</span>
+            </h1>
+
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 14, marginTop: 8 }}>
+              <span style={{ color: 'var(--fs-accent)', fontSize: '1rem', opacity: 0.7 }}>◆</span>
+              <button
+                style={{
+                  background: 'transparent',
+                  color: 'var(--fs-accent)',
+                  border: '2px solid var(--fs-accent)',
+                  borderRadius: 8,
+                  fontFamily: 'Cinzel, serif',
+                  fontWeight: 700,
+                  fontSize: '0.72rem',
+                  letterSpacing: '0.25em',
+                  textTransform: 'uppercase',
+                  padding: '16px 32px',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease, background 0.25s ease, color 0.25s ease',
+                  boxShadow: '0 6px 28px rgba(114,224,21,0.18)',
+                }}
+                onClick={() => window.open(WHATSAPP_URL, '_blank')}
+              >
+                AGENDAR VISITA
+              </button>
+              <span style={{ color: 'var(--fs-accent)', fontSize: '1rem', opacity: 0.7 }}>◆</span>
+            </div>
+
+            <div style={{ marginTop: 28, display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                <Clock size={15} color="var(--fs-accent)" />
+                <span>Seg–Sex: &nbsp;11h–21h</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                <Clock size={15} color="transparent" />
+                <span>Sáb–Dom: 14h–20h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="inicio" style={{ minHeight: '100dvh', paddingTop: 72, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
       <div className="fs-blob" style={{ width: 500, height: 500, right: '30%', top: '50%', transform: 'translateY(-50%)', opacity: 0.05 }} />
@@ -111,8 +244,6 @@ function HeroSection() {
             <span style={{ display: 'block', fontStyle: 'italic', color: 'var(--fs-accent)' }}>Ninja</span>
             <span style={{ display: 'block', color: 'var(--fs-text)' }}>no preto</span>
             <span style={{ display: 'block', color: 'var(--fs-text)' }}>e cinza</span>
-            {/* <span style={{ display: 'block', color: 'var(--fs-text)', fontSize: 44 }}>Premiado em</span>
-            <span style={{ display: 'block', color: 'var(--fs-text)', fontSize: 44 }}>convenção</span> */}
           </h1>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 14, marginTop: 8 }}>
             <span style={{ color: 'var(--fs-accent)', fontSize: '1rem', opacity: 0.7 }}>◆</span>
@@ -155,7 +286,6 @@ function HeroSection() {
           </div>
         </div>
         <div style={{ flex: '0 0 55%', position: 'relative', height: 900 }}>
-          {/* Forma decorativa atrás da imagem */}
           <svg
             viewBox="0 0 400 600"
             xmlns="http://www.w3.org/2000/svg"
@@ -181,6 +311,7 @@ function HeroSection() {
 }
 
 function PartnersStrip() {
+  const isMobile = useIsMobile();
   const partners = [
     { icon: Layers, name: 'Layers' },
     { icon: Zap, name: 'Sisyphus' },
@@ -190,7 +321,15 @@ function PartnersStrip() {
   ];
   return (
     <div style={{ borderTop: '1px solid var(--fs-divider)', borderBottom: '1px solid var(--fs-divider)', background: 'var(--fs-bg2)', padding: '28px 0' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 64px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 24 }}>
+      <div style={{
+        maxWidth: 1200, margin: '0 auto',
+        padding: isMobile ? '0 24px' : '0 64px',
+        display: 'flex',
+        justifyContent: isMobile ? 'center' : 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: isMobile ? 20 : 24,
+      }}>
         {partners.map((P, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase', opacity: 0.65, cursor: 'default', transition: 'opacity 0.25s, color 0.25s' }}
             onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.opacity = '1'; (e.currentTarget as HTMLDivElement).style.color = 'var(--fs-accent)'; }}
@@ -211,6 +350,7 @@ function PortfolioSection() {
   const col2Ref = useReveal();
   const col3Ref = useReveal();
   const [hov, setHov] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   const cardStyle = (hover: boolean): React.CSSProperties => ({
     borderRadius: 12, overflow: 'hidden', position: 'relative', cursor: 'pointer',
@@ -218,6 +358,78 @@ function PortfolioSection() {
     boxShadow: hover ? '0 8px 32px rgba(196,149,106,0.18)' : '0 2px 12px rgba(0,0,0,0.3)',
     transition: 'transform 0.2s ease, box-shadow 0.2s ease',
   });
+
+  if (isMobile) {
+    return (
+      <section id="portfolio" style={{ padding: '80px 0', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
+          <div ref={headRef} className="fs-fade-up" style={{ marginBottom: 40 }}>
+            <h2 style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: 28, lineHeight: 1.2, color: 'var(--fs-text)' }}>
+              Tatuador premiado em convenção!
+            </h2>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            {/* Main artist card */}
+            <div ref={col1Ref} className="fs-fade-up fs-delay-1">
+              <div style={{ ...cardStyle(hov === 'artist'), height: 340, background: 'var(--fs-bg2)' }}
+                onMouseEnter={() => setHov('artist')} onMouseLeave={() => setHov(null)}>
+                <img src="/images/tatuador/tatoo17.jpeg" alt="Artista" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(to top, rgba(26,22,16,0.92), transparent)' }} />
+                <div style={{ position: 'absolute', bottom: 20, left: 20 }}>
+                  <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.65rem', letterSpacing: '0.14em', color: 'var(--fs-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Artista Principal</p>
+                  <p style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: '1.2rem', color: 'var(--fs-accent-light)' }}>Fighting Star</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Two cards side by side */}
+            <div ref={col2Ref} className="fs-fade-up fs-delay-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+              {[
+                { img: '/images/tatuador/tatoo5.jpeg', price: 'R$ 2.800,00', label: 'GORILA URBANO' },
+                { img: '/images/tatuador/tatoo2.jpeg', price: 'R$ 1.500,00', label: 'SNAKE & SKULL' },
+              ].map((item) => (
+                <div key={item.label} style={{ ...cardStyle(hov === item.label), background: 'var(--fs-surface)', height: 180 }}
+                  onMouseEnter={() => setHov(item.label)} onMouseLeave={() => setHov(null)}>
+                  <img src={item.img} alt={item.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <div style={{ position: 'absolute', top: 10, left: 10 }}>
+                    <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.5rem', letterSpacing: '0.1em', color: 'var(--fs-muted)', textTransform: 'uppercase' }}>{item.label}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Process card */}
+            <div ref={col3Ref} className="fs-fade-up fs-delay-3" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <div style={{ ...cardStyle(hov === 'process'), height: 220 }}
+                onMouseEnter={() => setHov('process')} onMouseLeave={() => setHov(null)}>
+                <img src="/images/tatuador/tatoo3.jpeg" alt="Processo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 60%, rgba(26,22,16,0.7))' }} />
+              </div>
+              <div style={{ background: 'var(--fs-bg2)', borderRadius: 12, padding: '28px 24px', border: '1px solid var(--fs-divider)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <h3 style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: '1.4rem', color: 'var(--fs-accent-light)', lineHeight: 1.2 }}>
+                  O estúdio de tatuagem mais bem avaliado da cidade.
+                </h3>
+                <p style={{ color: 'var(--fs-muted)', fontSize: '0.85rem', lineHeight: 1.65 }}>
+                  Tem uma ideia? Me envie por DM!
+                </p>
+                <button style={{
+                  background: 'transparent', border: '1px solid var(--fs-accent)', color: 'var(--fs-accent)',
+                  borderRadius: 6, padding: '13px 0',
+                  fontFamily: 'Cinzel, serif', fontWeight: 700, fontSize: '0.68rem', letterSpacing: '0.14em', textTransform: 'uppercase',
+                  cursor: 'pointer', transition: 'background 0.25s, color 0.25s',
+                }}
+                  onClick={() => window.open(WHATSAPP_URL, '_blank')}
+                >
+                  FALE CONOSCO AGORA
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="portfolio" style={{ padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
@@ -335,25 +547,41 @@ const AVATARS = TESTIMONIALS.map(t => ({ initials: t.initials, gradient: t.gradi
 function TestimonialsSection() {
   const [idx, setIdx] = useState(0);
   const ref = useReveal();
+  const isMobile = useIsMobile();
+
+  const prevIdx = () => setIdx(p => (p - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+  const nextIdx = () => setIdx(p => (p + 1) % TESTIMONIALS.length);
+
+  const arrowBtnStyle: React.CSSProperties = {
+    width: 44, height: 44, borderRadius: '50%', background: 'rgba(114,224,21,0.1)',
+    border: '1px solid var(--fs-accent)', cursor: 'pointer',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    color: 'var(--fs-accent)',
+    boxShadow: '0 4px 16px rgba(114,224,21,0.12)', transition: 'background 0.2s',
+    flexShrink: 0,
+  };
 
   return (
-    <section id="depoimentos" style={{ padding: '120px 0', background: 'var(--fs-bg2)', borderTop: '1px solid var(--fs-divider)', borderBottom: '1px solid var(--fs-divider)' }}>
-      <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 64px' }}>
-        <div ref={ref} className="fs-fade-up" style={{ textAlign: 'center', marginBottom: 56 }}>
+    <section id="depoimentos" style={{ padding: isMobile ? '80px 0' : '120px 0', background: 'var(--fs-bg2)', borderTop: '1px solid var(--fs-divider)', borderBottom: '1px solid var(--fs-divider)' }}>
+      <div style={{ maxWidth: 860, margin: '0 auto', padding: isMobile ? '0 24px' : '0 64px' }}>
+        <div ref={ref} className="fs-fade-up" style={{ textAlign: 'center', marginBottom: 48 }}>
           <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.7rem', letterSpacing: '0.2em', color: 'var(--fs-accent)', textTransform: 'uppercase', marginBottom: 16 }}>Depoimentos</p>
-          <h2 style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: 52, color: 'var(--fs-text)', lineHeight: 1.1 }}>
+          <h2 style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: isMobile ? 32 : 52, color: 'var(--fs-text)', lineHeight: 1.1 }}>
             O Que Nossos<br />Clientes Dizem
           </h2>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 16, marginBottom: 48 }}>
+
+        {/* Avatars row */}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: isMobile ? 6 : 16, marginBottom: 40, flexWrap: 'wrap' }}>
           {AVATARS.map((av, i) => {
             const active = i === idx;
+            const size = active ? (isMobile ? 48 : 58) : (isMobile ? 34 : 42);
             return (
               <div key={i} onClick={() => setIdx(i)}
                 style={{
-                  width: active ? 58 : 42, height: active ? 58 : 42, borderRadius: '50%', background: av.gradient,
+                  width: size, height: size, borderRadius: '50%', background: av.gradient,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontFamily: 'Cinzel, serif', fontWeight: 700, fontSize: active ? '0.75rem' : '0.6rem',
+                  fontFamily: 'Cinzel, serif', fontWeight: 700, fontSize: active ? '0.65rem' : '0.52rem',
                   color: 'var(--fs-surface)',
                   border: active ? '2px solid var(--fs-accent)' : '2px solid transparent',
                   boxShadow: active ? '0 0 18px rgba(196,149,106,0.35)' : 'none',
@@ -367,60 +595,49 @@ function TestimonialsSection() {
             );
           })}
         </div>
-        <div style={{ position: 'relative' }}>
-          <button onClick={() => setIdx(p => (p - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
-            style={{
-              position: 'absolute', left: -24, top: '50%', transform: 'translateY(-50%)',
-              width: 48, height: 48, borderRadius: '50%', background: 'rgba(114,224,21,0.1)',
-              border: '1px solid var(--fs-accent)', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--fs-accent)', opacity: 1,
-              boxShadow: '0 4px 16px rgba(114,224,21,0.12)', transition: 'background 0.2s', zIndex: 2,
-            }}
+
+        {/* Card */}
+        <div style={{
+          background: 'var(--fs-bg)', border: '1px solid var(--fs-divider)',
+          borderRadius: 20, padding: isMobile ? '36px 24px' : '48px 56px', textAlign: 'center',
+          boxShadow: '0 4px 32px rgba(196,149,106,0.08)',
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 4, marginBottom: 24 }}>
+            {Array(TESTIMONIALS[idx].stars).fill(0).map((_, i) => (
+              <Star key={i} size={18} fill="var(--fs-accent)" color="var(--fs-accent)" />
+            ))}
+          </div>
+          <p style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: isMobile ? '1.05rem' : '1.35rem', color: 'var(--fs-text)', lineHeight: 1.7, marginBottom: 28 }}>
+            {TESTIMONIALS[idx].quote}
+          </p>
+          <p style={{ fontFamily: 'Cinzel, serif', fontWeight: 700, fontSize: '0.72rem', letterSpacing: '0.18em', color: 'var(--fs-accent-light)' }}>
+            — {TESTIMONIALS[idx].name}
+          </p>
+        </div>
+
+        {/* Navigation arrows below card on mobile */}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 16, marginTop: 24 }}>
+          <button onClick={prevIdx} style={arrowBtnStyle}
             onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(114,224,21,0.22)')}
             onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(114,224,21,0.1)')}
           >
             <ChevronLeft size={22} />
           </button>
-          <div style={{
-            background: 'var(--fs-bg)', border: '1px solid var(--fs-divider)',
-            borderRadius: 20, padding: '48px 56px', textAlign: 'center',
-            boxShadow: '0 4px 32px rgba(196,149,106,0.08)',
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: 4, marginBottom: 28 }}>
-              {Array(TESTIMONIALS[idx].stars).fill(0).map((_, i) => (
-                <Star key={i} size={18} fill="var(--fs-accent)" color="var(--fs-accent)" />
-              ))}
-            </div>
-            <p style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: '1.35rem', color: 'var(--fs-text)', lineHeight: 1.7, marginBottom: 32 }}>
-              {TESTIMONIALS[idx].quote}
-            </p>
-            <p style={{ fontFamily: 'Cinzel, serif', fontWeight: 700, fontSize: '0.72rem', letterSpacing: '0.18em', color: 'var(--fs-accent-light)' }}>
-              — {TESTIMONIALS[idx].name}
-            </p>
+          {/* Dots */}
+          <div style={{ display: 'flex', gap: 8 }}>
+            {TESTIMONIALS.map((_, i) => (
+              <button key={i} onClick={() => setIdx(i)} style={{
+                width: i === idx ? 24 : 8, height: 8, borderRadius: 4, border: 'none', cursor: 'pointer',
+                background: i === idx ? 'var(--fs-accent)' : 'var(--fs-divider)', transition: 'all 0.3s ease', padding: 0,
+              }} />
+            ))}
           </div>
-          <button onClick={() => setIdx(p => (p + 1) % TESTIMONIALS.length)}
-            style={{
-              position: 'absolute', right: -24, top: '50%', transform: 'translateY(-50%)',
-              width: 48, height: 48, borderRadius: '50%', background: 'rgba(114,224,21,0.1)',
-              border: '1px solid var(--fs-accent)', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: 'var(--fs-accent)', opacity: 1,
-              boxShadow: '0 4px 16px rgba(114,224,21,0.12)', transition: 'background 0.2s', zIndex: 2,
-            }}
+          <button onClick={nextIdx} style={arrowBtnStyle}
             onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(114,224,21,0.22)')}
             onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(114,224,21,0.1)')}
           >
             <ChevronRight size={22} />
           </button>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 32 }}>
-          {TESTIMONIALS.map((_, i) => (
-            <button key={i} onClick={() => setIdx(i)} style={{
-              width: i === idx ? 24 : 8, height: 8, borderRadius: 4, border: 'none', cursor: 'pointer',
-              background: i === idx ? 'var(--fs-accent)' : 'var(--fs-divider)', transition: 'all 0.3s ease', padding: 0,
-            }} />
-          ))}
         </div>
       </div>
     </section>
@@ -449,14 +666,15 @@ const FAQS = [
 function FaqSection() {
   const [openIdx, setOpenIdx] = useState(1);
   const ref = useReveal();
+  const isMobile = useIsMobile();
 
   return (
-    <section id="faq" style={{ padding: '120px 0', position: 'relative' }}>
+    <section id="faq" style={{ padding: isMobile ? '80px 0' : '120px 0', position: 'relative' }}>
       <div className="fs-blob" style={{ width: 400, height: 400, right: -100, bottom: 0, opacity: 0.06 }} />
-      <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 64px', position: 'relative', zIndex: 1 }}>
-        <div ref={ref} className="fs-fade-up" style={{ textAlign: 'center', marginBottom: 72 }}>
+      <div style={{ maxWidth: 860, margin: '0 auto', padding: isMobile ? '0 24px' : '0 64px', position: 'relative', zIndex: 1 }}>
+        <div ref={ref} className="fs-fade-up" style={{ textAlign: 'center', marginBottom: 56 }}>
           <img src="/images/tatuador/logo-tatoo-removebg-preview.png" alt="Logo" style={{ height: 36, width: 36, objectFit: 'contain' }} />
-          <h2 style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: 48, color: 'var(--fs-text)', marginTop: 20, lineHeight: 1.1 }}>
+          <h2 style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: isMobile ? 32 : 48, color: 'var(--fs-text)', marginTop: 20, lineHeight: 1.1 }}>
             Perguntas Frequentes
           </h2>
         </div>
@@ -467,13 +685,15 @@ function FaqSection() {
               <div key={i} style={{ borderTop: '1px solid var(--fs-divider)' }}>
                 <button onClick={() => setOpenIdx(isOpen ? -1 : i)}
                   style={{
-                    width: '100%', padding: '28px 0',
+                    width: '100%', padding: isMobile ? '22px 0' : '28px 0',
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', gap: 24,
+                    background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', gap: 16,
                   }}
                 >
                   <span style={{
-                    fontFamily: 'Cinzel, serif', fontWeight: 600, fontSize: '0.82rem', letterSpacing: '0.1em', textTransform: 'uppercase',
+                    fontFamily: 'Cinzel, serif', fontWeight: 600,
+                    fontSize: isMobile ? '0.72rem' : '0.82rem',
+                    letterSpacing: '0.08em', textTransform: 'uppercase',
                     color: isOpen ? 'var(--fs-accent)' : 'var(--fs-text)', transition: 'color 0.25s ease',
                   }}>
                     {faq.q}
@@ -486,8 +706,8 @@ function FaqSection() {
                   <div className="fs-accordion-inner">
                     <div style={{
                       fontFamily: 'Inter, sans-serif', color: 'var(--fs-muted)',
-                      fontSize: '0.9rem', lineHeight: 1.8, paddingBottom: 32,
-                      paddingLeft: 20, borderLeft: '2px solid rgba(114,224,21,0.2)',
+                      fontSize: '0.88rem', lineHeight: 1.8, paddingBottom: 28,
+                      paddingLeft: 16, borderLeft: '2px solid rgba(114,224,21,0.2)',
                       whiteSpace: 'pre-line',
                     }}>
                       {faq.a}
@@ -504,8 +724,51 @@ function FaqSection() {
   );
 }
 
-
 function Footer() {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <footer style={{ background: 'var(--fs-bg)', borderTop: '1px solid var(--fs-divider)', paddingTop: 48, paddingBottom: 32 }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 36, marginBottom: 40 }}>
+            {/* Logo */}
+            <img src="/images/tatuador/logo-tatoo-removebg-preview.png" alt="Logo" style={{ height: 120, width: 120, objectFit: 'contain' }} />
+
+            {/* Links */}
+            <div style={{ display: 'flex', gap: 40, justifyContent: 'center' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center' }}>
+                {['PÁGINA INICIAL', 'PORTFÓLIO', 'SOBRE NÓS'].map(l => (
+                  <a key={l} href="#" style={{ fontFamily: 'Cinzel, serif', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--fs-muted)', textDecoration: 'none', transition: 'color 0.25s' }}>{l}</a>
+                ))}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center' }}>
+                {['ORÇAMENTOS', 'PREÇOS', 'DESAFIOS'].map(l => (
+                  <a key={l} href="#" style={{ fontFamily: 'Cinzel, serif', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--fs-muted)', textDecoration: 'none', transition: 'color 0.25s' }}>{l}</a>
+                ))}
+              </div>
+            </div>
+
+            {/* Social icons */}
+            <div style={{ display: 'flex', gap: 12 }}>
+              {([Youtube, Twitter, Instagram] as React.ElementType[]).map((Icon, i) => (
+                <a key={i} href="#" style={{
+                  width: 42, height: 42, borderRadius: '50%',
+                  border: '1px solid var(--fs-divider)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: 'var(--fs-muted)', textDecoration: 'none',
+                  transition: 'border-color 0.25s, color 0.25s',
+                }}>
+                  <Icon size={17} strokeWidth={1.5} />
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </footer>
+    );
+  }
+
   return (
     <footer style={{ background: 'var(--fs-bg)', borderTop: '1px solid var(--fs-divider)', paddingTop: 64, paddingBottom: 32 }}>
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 64px' }}>
@@ -546,18 +809,6 @@ function Footer() {
               </a>
             ))}
           </div>
-        </div>
-        <div style={{ height: 1, background: 'var(--fs-divider)', marginBottom: 28 }} />
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: 'Inter, sans-serif', fontSize: '0.68rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(138,127,110,0.55)' }}>
-          <div style={{ display: 'flex', gap: 32 }}>
-            {['TERMOS & CONDIÇÕES', 'POLÍTICA DE PRIVACIDADE'].map(l => (
-              <a key={l} href="#" style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.25s' }}
-                onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-muted)')}
-                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(138,127,110,0.55)')}
-              >{l}</a>
-            ))}
-          </div>
-          <span>© 2024 FIGHTING STAR. TODOS OS DIREITOS RESERVADOS.</span>
         </div>
       </div>
     </footer>
