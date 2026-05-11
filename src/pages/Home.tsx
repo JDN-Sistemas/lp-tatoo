@@ -166,7 +166,6 @@ function Navbar() {
 }
 
 function HeroSection() {
-  const textRef = useReveal();
   const isMobile = useIsMobile();
 
   if (isMobile) {
@@ -239,7 +238,7 @@ function HeroSection() {
       <div className="fs-blob" style={{ width: 500, height: 500, right: '30%', top: '50%', transform: 'translateY(-50%)', opacity: 0.05 }} />
       <div className="fs-blob" style={{ width: 300, height: 300, left: '-80px', bottom: '10%', opacity: 0.07, borderRadius: '50%' }} />
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 64px', width: '100%', display: 'flex', alignItems: 'center', gap: 40 }}>
-        <div ref={textRef} className="fs-fade-up" style={{ flex: '0 0 45%', paddingRight: 40, paddingTop: 48, paddingBottom: 48 }}>
+        <div style={{ flex: '0 0 45%', paddingRight: 40, paddingTop: 48, paddingBottom: 48, animation: 'fadeInUp 0.7s ease 0.1s both' }}>
           <h1 style={{ fontFamily: 'Cinzel Decorative, serif', fontWeight: 700, fontSize: 68, lineHeight: 1.1, marginBottom: 24 }}>
             <span style={{ display: 'block', fontStyle: 'italic', color: 'var(--fs-accent)' }}>Ninja</span>
             <span style={{ display: 'block', color: 'var(--fs-text)' }}>no preto</span>
