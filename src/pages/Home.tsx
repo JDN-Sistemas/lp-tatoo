@@ -763,6 +763,24 @@ function Footer() {
               ))}
             </div>
           </div>
+
+          {/* Credit bar */}
+          <div style={{ borderTop: '1px solid var(--fs-divider)', paddingTop: 20, textAlign: 'center' }}>
+            <a
+              href="https://www.moveonsistemas.com.br/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontFamily: 'Cinzel, serif', fontSize: '0.58rem', letterSpacing: '0.14em',
+                textTransform: 'uppercase', textDecoration: 'none',
+                color: 'var(--fs-muted)', transition: 'color 0.25s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-accent)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--fs-muted)')}
+            >
+              Desenvolvido por <span style={{ color: 'var(--fs-accent)' }}>Moveon Sistemas</span>
+            </a>
+          </div>
         </div>
       </footer>
     );
@@ -808,6 +826,24 @@ function Footer() {
               </a>
             ))}
           </div>
+        </div>
+
+        {/* Credit bar */}
+        <div style={{ borderTop: '1px solid var(--fs-divider)', paddingTop: 24, textAlign: 'center' }}>
+          <a
+            href="https://www.moveonsistemas.com.br/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontFamily: 'Cinzel, serif', fontSize: '0.62rem', letterSpacing: '0.14em',
+              textTransform: 'uppercase', textDecoration: 'none',
+              color: 'var(--fs-muted)', transition: 'color 0.25s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.color = 'var(--fs-accent)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'var(--fs-muted)')}
+          >
+            Desenvolvido por <span style={{ color: 'var(--fs-accent)' }}>Moveon Sistemas</span>
+          </a>
         </div>
       </div>
     </footer>
