@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  ArrowRight, Clock, Layers, Zap, Circle, BookOpen, Search,
+  ArrowRight, Clock, MapPin, Layers, Zap, Circle, BookOpen, Search,
   Star, ChevronLeft, ChevronRight, Plus, Menu, X,
   Youtube, Twitter, Instagram
 } from 'lucide-react';
@@ -165,6 +165,8 @@ function Navbar() {
   );
 }
 
+const TATTOO_STYLES = ['Realismo', 'Trabalhos Coloridos', 'Artes Exclusivas'];
+
 function HeroSection() {
   const isMobile = useIsMobile();
 
@@ -184,11 +186,17 @@ function HeroSection() {
           </div>
 
           <div style={{ paddingBottom: 40, animation: 'fadeInUp 0.7s ease 0.2s both' }}>
-            <h1 style={{ fontFamily: 'Cinzel Decorative, serif', fontWeight: 700, fontSize: 'clamp(26px, 9vw, 40px)', lineHeight: 1.15, marginBottom: 24 }}>
+            <h1 style={{ fontFamily: 'Cinzel Decorative, serif', fontWeight: 700, fontSize: 'clamp(26px, 9vw, 40px)', lineHeight: 1.15, marginBottom: 16 }}>
               <span style={{ display: 'block', fontStyle: 'italic', color: 'var(--fs-accent)' }}>Ninja</span>
               <span style={{ display: 'block', color: 'var(--fs-text)' }}>no preto</span>
               <span style={{ display: 'block', color: 'var(--fs-text)' }}>e cinza</span>
             </h1>
+
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center', marginBottom: 20 }}>
+              {TATTOO_STYLES.map(s => (
+                <span key={s} style={{ fontFamily: 'Cinzel, serif', fontSize: '0.58rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--fs-accent)', border: '1px solid var(--fs-accent)', borderRadius: 4, padding: '5px 12px', opacity: 0.85 }}>{s}</span>
+              ))}
+            </div>
 
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 14, marginTop: 8 }}>
               <span style={{ color: 'var(--fs-accent)', fontSize: '1rem', opacity: 0.7 }}>◆</span>
@@ -217,10 +225,14 @@ function HeroSection() {
               <span style={{ color: 'var(--fs-accent)', fontSize: '1rem', opacity: 0.7 }}>◆</span>
             </div>
 
-            <div style={{ marginTop: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ marginTop: 28, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
                 <Clock size={15} color="var(--fs-accent)" />
                 <span>Atendimento personalizado com hora marcada</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                <MapPin size={15} color="var(--fs-accent)" />
+                <span>Região nobre · às margens do lago · próximo ao shopping</span>
               </div>
             </div>
           </div>
@@ -235,11 +247,18 @@ function HeroSection() {
       <div className="fs-blob" style={{ width: 300, height: 300, left: '-80px', bottom: '10%', opacity: 0.07, borderRadius: '50%' }} />
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 64px', width: '100%', display: 'flex', alignItems: 'center', gap: 40 }}>
         <div style={{ flex: '0 0 45%', paddingRight: 40, paddingTop: 48, paddingBottom: 48, animation: 'fadeInUp 0.7s ease 0.1s both' }}>
-          <h1 style={{ fontFamily: 'Cinzel Decorative, serif', fontWeight: 700, fontSize: 68, lineHeight: 1.1, marginBottom: 24 }}>
+          <h1 style={{ fontFamily: 'Cinzel Decorative, serif', fontWeight: 700, fontSize: 68, lineHeight: 1.1, marginBottom: 16 }}>
             <span style={{ display: 'block', fontStyle: 'italic', color: 'var(--fs-accent)' }}>Ninja</span>
             <span style={{ display: 'block', color: 'var(--fs-text)' }}>no preto</span>
             <span style={{ display: 'block', color: 'var(--fs-text)' }}>e cinza</span>
           </h1>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
+            {TATTOO_STYLES.map(s => (
+              <span key={s} style={{ fontFamily: 'Cinzel, serif', fontSize: '0.6rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--fs-accent)', border: '1px solid var(--fs-accent)', borderRadius: 4, padding: '5px 14px', opacity: 0.85 }}>{s}</span>
+            ))}
+          </div>
+
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 14, marginTop: 8 }}>
             <span style={{ color: 'var(--fs-accent)', fontSize: '1rem', opacity: 0.7 }}>◆</span>
             <button
@@ -269,10 +288,14 @@ function HeroSection() {
             </button>
             <span style={{ color: 'var(--fs-accent)', fontSize: '1rem', opacity: 0.7 }}>◆</span>
           </div>
-          <div style={{ marginTop: 40 }}>
+          <div style={{ marginTop: 40, display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
               <Clock size={15} color="var(--fs-accent)" />
               <span>Atendimento personalizado com hora marcada</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+              <MapPin size={15} color="var(--fs-accent)" />
+              <span>Região nobre · às margens do lago · próximo ao shopping</span>
             </div>
           </div>
         </div>
@@ -650,7 +673,7 @@ const FAQS = [
   },
   {
     q: 'QUAL É A LOCALIZAÇÃO DE VOCÊS?',
-    a: 'Estamos localizados no coração da cidade. Entre em contato via formulário de orçamento ou pelas nossas redes sociais para obter o endereço completo e agendar uma visita ao estúdio.',
+    a: 'Estamos em uma área nobre da cidade, às margens do lago, próximo ao shopping. Um espaço aconchegante e fácil de encontrar. Entre em contato para obter o endereço completo e agendar sua visita ao estúdio.',
   },
 ];
 
