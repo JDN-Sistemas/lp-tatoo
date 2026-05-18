@@ -85,7 +85,9 @@ function Navbar() {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           transition: 'background 0.3s ease',
         }}>
-          <img src="/images/tatuador/logo-tatoo-removebg-preview.png" alt="Logo" style={{ height: 56, width: 56, objectFit: 'contain' }} />
+          <a href="#inicio" style={{ display: 'flex', alignItems: 'center' }}>
+            <img src="/images/tatuador/logo-tatoo-removebg-preview.png" alt="Logo" style={{ height: 56, width: 56, objectFit: 'contain' }} />
+          </a>
           <button
             onClick={() => setMenuOpen(v => !v)}
             style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--fs-text)', padding: 8, display: 'flex', alignItems: 'center' }}
@@ -151,7 +153,9 @@ function Navbar() {
             >{label}</a>
           ))}
         </div>
-        <img src="/images/tatuador/logo-tatoo-removebg-preview.png" alt="Logo" style={{ height: 120, width: 120, objectFit: 'contain' }} />
+        <a href="#inicio" style={{ display: 'flex', alignItems: 'center' }}>
+          <img src="/images/tatuador/logo-tatoo-removebg-preview.png" alt="Logo" style={{ height: 120, width: 120, objectFit: 'contain' }} />
+        </a>
         <div style={{ display: 'flex', alignItems: 'center', gap: 36 }}>
           {[{ label: 'DEPOIMENTOS', href: '#depoimentos' }, { label: 'FAQ', href: '#faq' }].map(({ label, href }) => (
             <a key={label} href={href} style={linkStyle}
@@ -225,13 +229,13 @@ function HeroSection() {
               <span style={{ color: 'var(--fs-accent)', fontSize: '1rem', opacity: 0.7 }}>◆</span>
             </div>
 
-            <div style={{ marginTop: 28, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                <Clock size={15} color="var(--fs-accent)" />
+            <div style={{ marginTop: 28, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 16, width: '100%', maxWidth: 320 }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                <Clock size={15} color="var(--fs-accent)" style={{ flexShrink: 0, marginTop: 1 }} />
                 <span>Atendimento personalizado com hora marcada</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                <MapPin size={15} color="var(--fs-accent)" />
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                <MapPin size={15} color="var(--fs-accent)" style={{ flexShrink: 0, marginTop: 1 }} />
                 <span>Região nobre · às margens do lago · próximo ao shopping</span>
               </div>
             </div>
