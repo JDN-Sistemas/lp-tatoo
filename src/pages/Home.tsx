@@ -217,14 +217,10 @@ function HeroSection() {
               <span style={{ color: 'var(--fs-accent)', fontSize: '1rem', opacity: 0.7 }}>◆</span>
             </div>
 
-            <div style={{ marginTop: 28, display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'center' }}>
+            <div style={{ marginTop: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
                 <Clock size={15} color="var(--fs-accent)" />
-                <span>Seg–Sex: &nbsp;11h–21h</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                <Clock size={15} color="transparent" />
-                <span>Sáb–Dom: 14h–20h</span>
+                <span>Atendimento personalizado com hora marcada</span>
               </div>
             </div>
           </div>
@@ -273,14 +269,10 @@ function HeroSection() {
             </button>
             <span style={{ color: 'var(--fs-accent)', fontSize: '1rem', opacity: 0.7 }}>◆</span>
           </div>
-          <div className="fs-fade-up fs-delay-3" style={{ marginTop: 40, display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ marginTop: 40 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
               <Clock size={15} color="var(--fs-accent)" />
-              <span>Seg–Sex: &nbsp;11h–21h</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--fs-muted)', fontFamily: 'Cinzel, serif', fontSize: '0.68rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-              <div style={{ width: 15 }} />
-              <span>Sáb–Dom: 14h–20h</span>
+              <span>Atendimento personalizado com hora marcada</span>
             </div>
           </div>
         </div>
