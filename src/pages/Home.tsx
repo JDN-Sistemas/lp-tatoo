@@ -673,7 +673,7 @@ const FAQS = [
   },
   {
     q: 'VOCÊS FAZEM QUALQUER TIPO DE TATUAGEM?',
-    a: 'Trabalhamos com a maioria dos estilos — Old School, Blackwork, Realismo, Neo-Tradicional, Geometria e Arte Autoral. Avaliamos cada pedido individualmente para garantir que possamos executar com o padrão Fighting Star.',
+    a: 'Sim! Nossas especialidades são:\n\n Realismo — Retratos e cenas com riqueza de detalhes que parecem fotografias na pele.\n\n Trabalhos Coloridos — Composições vibrantes com pigmentação de alta qualidade que mantém a cor por anos.\n\n Artes Exclusivas — Criamos designs únicos e autorais desenvolvidos exclusivamente para você, sem repetição.\n\nTambém atendemos outros estilos como Old School, Blackwork e Geometria. Cada pedido é avaliado individualmente para garantir o padrão do estúdio.',
   },
   {
     q: 'QUAL É A LOCALIZAÇÃO DE VOCÊS?',
