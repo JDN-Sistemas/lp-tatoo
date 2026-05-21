@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  ArrowRight, Clock, MapPin, Layers, Zap, Circle, BookOpen, Search,
+  ArrowRight, Clock, MapPin, Eye, Palette, Anchor, Moon, Triangle,
   Star, ChevronLeft, ChevronRight, Plus, Menu, X,
   Youtube, Twitter, Instagram
 } from 'lucide-react';
@@ -331,11 +331,11 @@ function HeroSection() {
 function PartnersStrip() {
   const isMobile = useIsMobile();
   const partners = [
-    { icon: Layers, name: 'Layers' },
-    { icon: Zap, name: 'Sisyphus' },
-    { icon: Circle, name: 'Circooles' },
-    { icon: BookOpen, name: 'Catalog' },
-    { icon: Search, name: 'Quotient' },
+    { icon: Eye, name: 'Realismo' },
+    { icon: Palette, name: 'Colorido' },
+    { icon: Anchor, name: 'Old School' },
+    { icon: Moon, name: 'Blackwork' },
+    { icon: Triangle, name: 'Geométrico' },
   ];
   return (
     <div style={{ borderTop: '1px solid var(--fs-divider)', borderBottom: '1px solid var(--fs-divider)', background: 'var(--fs-bg2)', padding: '28px 0' }}>
