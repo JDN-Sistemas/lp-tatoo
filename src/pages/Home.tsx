@@ -396,7 +396,7 @@ function PortfolioSection() {
                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(to top, rgba(26,22,16,0.92), transparent)' }} />
                 <div style={{ position: 'absolute', bottom: 20, left: 20 }}>
                   <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.65rem', letterSpacing: '0.14em', color: 'var(--fs-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Artista Principal</p>
-                  <p style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: '1.2rem', color: 'var(--fs-accent-light)' }}>Fighting Star</p>
+                  <p style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: '1.2rem', color: 'var(--fs-accent-light)' }}>Pablo</p>
                 </div>
               </div>
             </div>
@@ -466,7 +466,7 @@ function PortfolioSection() {
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 160, background: 'linear-gradient(to top, rgba(26,22,16,0.92), transparent)' }} />
               <div style={{ position: 'absolute', bottom: 24, left: 24 }}>
                 <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.65rem', letterSpacing: '0.14em', color: 'var(--fs-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Artista Principal</p>
-                <p style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: '1.4rem', color: 'var(--fs-accent-light)' }}>Fighting Star</p>
+                <p style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: '1.4rem', color: 'var(--fs-accent-light)' }}>Pablo</p>
               </div>
             </div>
           </div>
