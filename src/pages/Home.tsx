@@ -368,7 +368,15 @@ function PortfolioSection() {
   const col2Ref = useReveal();
   const col3Ref = useReveal();
   const [hov, setHov] = useState<string | null>(null);
+  const [carouselIdx, setCarouselIdx] = useState(0);
   const isMobile = useIsMobile();
+
+  const carouselImgs = [
+    '/images/tatuador/tatoo5.jpeg',
+    '/images/tatuador/tatoo-peitoral.jpeg',
+    '/images/tatuador/tatoo4.jpeg',
+    '/images/tatuador/tatoo3.jpeg',
+  ];
 
   const cardStyle = (hover: boolean): React.CSSProperties => ({
     borderRadius: 12, overflow: 'hidden', position: 'relative', cursor: 'pointer',
@@ -392,7 +400,7 @@ function PortfolioSection() {
             <div ref={col1Ref} className="fs-fade-up fs-delay-1">
               <div style={{ ...cardStyle(hov === 'artist'), height: 340, background: 'var(--fs-bg2)' }}
                 onMouseEnter={() => setHov('artist')} onMouseLeave={() => setHov(null)}>
-                <img src="/images/tatuador/tatoo17.jpeg" alt="Artista" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+                <img src="/images/tatuador/tatuador-camisa-preta.jpeg" alt="Artista" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 120, background: 'linear-gradient(to top, rgba(26,22,16,0.92), transparent)' }} />
                 <div style={{ position: 'absolute', bottom: 20, left: 20 }}>
                   <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.65rem', letterSpacing: '0.14em', color: 'var(--fs-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Artista Principal</p>
@@ -404,12 +412,12 @@ function PortfolioSection() {
             {/* Two cards side by side */}
             <div ref={col2Ref} className="fs-fade-up fs-delay-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
               {[
-                { img: '/images/tatuador/tatoo5.jpeg', price: 'R$ 2.800,00', label: 'GORILA URBANO' },
-                { img: '/images/tatuador/tatoo2.jpeg', price: 'R$ 1.500,00', label: 'SNAKE & SKULL' },
+                { img: '/images/tatuador/tattoo-produtos.jpeg', price: 'R$ 2.800,00', label: 'GORILA URBANO' },
+                { img: '/images/tatuador/tatoo-braco.jpeg', price: 'R$ 1.500,00', label: 'SNAKE & SKULL', pos: 'center 80%' },
               ].map((item) => (
                 <div key={item.label} style={{ ...cardStyle(hov === item.label), background: 'var(--fs-surface)', height: 180 }}
                   onMouseEnter={() => setHov(item.label)} onMouseLeave={() => setHov(null)}>
-                  <img src={item.img} alt={item.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={item.img} alt={item.label} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: item.pos || 'center' }} />
                   <div style={{ position: 'absolute', top: 10, left: 10 }}>
                     <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.5rem', letterSpacing: '0.1em', color: 'var(--fs-muted)', textTransform: 'uppercase' }}>{item.label}</p>
                   </div>
@@ -421,8 +429,22 @@ function PortfolioSection() {
             <div ref={col3Ref} className="fs-fade-up fs-delay-3" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
               <div style={{ ...cardStyle(hov === 'process'), height: 220 }}
                 onMouseEnter={() => setHov('process')} onMouseLeave={() => setHov(null)}>
-                <img src="/images/tatuador/tatoo3.jpeg" alt="Processo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={carouselImgs[carouselIdx]} alt="Processo" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.4s' }} />
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 60%, rgba(26,22,16,0.7))' }} />
+                <button onClick={e => { e.stopPropagation(); setCarouselIdx(i => (i - 1 + carouselImgs.length) % carouselImgs.length); }}
+                  style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.45)', border: 'none', borderRadius: '50%', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}>
+                  <ChevronLeft size={16} />
+                </button>
+                <button onClick={e => { e.stopPropagation(); setCarouselIdx(i => (i + 1) % carouselImgs.length); }}
+                  style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.45)', border: 'none', borderRadius: '50%', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}>
+                  <ChevronRight size={16} />
+                </button>
+                <div style={{ position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 5 }}>
+                  {carouselImgs.map((_, i) => (
+                    <div key={i} onClick={e => { e.stopPropagation(); setCarouselIdx(i); }}
+                      style={{ width: 6, height: 6, borderRadius: '50%', background: i === carouselIdx ? 'var(--fs-accent)' : 'rgba(255,255,255,0.4)', cursor: 'pointer', transition: 'background 0.3s' }} />
+                  ))}
+                </div>
               </div>
               <div style={{ background: 'var(--fs-bg2)', borderRadius: 12, padding: '28px 24px', border: '1px solid var(--fs-divider)', display: 'flex', flexDirection: 'column', gap: 16 }}>
                 <h3 style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: '1.4rem', color: 'var(--fs-accent-light)', lineHeight: 1.2 }}>
@@ -462,7 +484,7 @@ function PortfolioSection() {
           <div ref={col1Ref} className="fs-fade-up fs-delay-1" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             <div style={{ ...cardStyle(hov === 'artist'), height: 500, background: 'var(--fs-bg2)' }}
               onMouseEnter={() => setHov('artist')} onMouseLeave={() => setHov(null)}>
-              <img src="/images/tatuador/tatoo17.jpeg" alt="Artista" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
+              <img src="/images/tatuador/tatuador-camisa-preta.jpeg" alt="Artista" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 160, background: 'linear-gradient(to top, rgba(26,22,16,0.92), transparent)' }} />
               <div style={{ position: 'absolute', bottom: 24, left: 24 }}>
                 <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.65rem', letterSpacing: '0.14em', color: 'var(--fs-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Artista Principal</p>
@@ -472,12 +494,12 @@ function PortfolioSection() {
           </div>
           <div ref={col2Ref} className="fs-fade-up fs-delay-2" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             {[
-              { img: '/images/tatuador/tatoo5.jpeg', price: 'R$ 2.800,00', label: 'GORILA URBANO' },
-              { img: '/images/tatuador/tatoo2.jpeg', price: 'R$ 1.500,00', label: 'SNAKE & SKULL' },
+              { img: '/images/tatuador/tattoo-produtos.jpeg', price: 'R$ 2.800,00', label: 'GORILA URBANO' },
+              { img: '/images/tatuador/tatoo-braco.jpeg', price: 'R$ 1.500,00', label: 'SNAKE & SKULL', pos: 'center 80%' },
             ].map((item) => (
               <div key={item.label} style={{ ...cardStyle(hov === item.label), background: 'var(--fs-surface)', height: 238 }}
                 onMouseEnter={() => setHov(item.label)} onMouseLeave={() => setHov(null)}>
-                <img src={item.img} alt={item.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={item.img} alt={item.label} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: item.pos || 'center' }} />
                 <div style={{ position: 'absolute', top: 14, left: 14 }}>
                   <p style={{ fontFamily: 'Cinzel, serif', fontSize: '0.58rem', letterSpacing: '0.12em', color: 'var(--fs-muted)', textTransform: 'uppercase' }}>{item.label}</p>
                 </div>
@@ -487,8 +509,22 @@ function PortfolioSection() {
           <div ref={col3Ref} className="fs-fade-up fs-delay-3" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             <div style={{ ...cardStyle(hov === 'process'), height: 320 }}
               onMouseEnter={() => setHov('process')} onMouseLeave={() => setHov(null)}>
-              <img src="/images/tatuador/tatoo3.jpeg" alt="Processo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={carouselImgs[carouselIdx]} alt="Processo" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.4s' }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 60%, rgba(26,22,16,0.7))' }} />
+              <button onClick={e => { e.stopPropagation(); setCarouselIdx(i => (i - 1 + carouselImgs.length) % carouselImgs.length); }}
+                style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.45)', border: 'none', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}>
+                <ChevronLeft size={18} />
+              </button>
+              <button onClick={e => { e.stopPropagation(); setCarouselIdx(i => (i + 1) % carouselImgs.length); }}
+                style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.45)', border: 'none', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}>
+                <ChevronRight size={18} />
+              </button>
+              <div style={{ position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6 }}>
+                {carouselImgs.map((_, i) => (
+                  <div key={i} onClick={e => { e.stopPropagation(); setCarouselIdx(i); }}
+                    style={{ width: 7, height: 7, borderRadius: '50%', background: i === carouselIdx ? 'var(--fs-accent)' : 'rgba(255,255,255,0.4)', cursor: 'pointer', transition: 'background 0.3s' }} />
+                ))}
+              </div>
             </div>
             <div style={{ background: 'var(--fs-bg2)', borderRadius: 12, padding: 32, border: '1px solid var(--fs-divider)', display: 'flex', flexDirection: 'column', gap: 16, flex: 1 }}>
               <h3 style={{ fontFamily: 'Cinzel Decorative, serif', fontSize: '1.9rem', color: 'var(--fs-accent-light)', lineHeight: 1.15 }}>
